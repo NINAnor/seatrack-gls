@@ -909,7 +909,7 @@ seatrackGLS <- function(luxfile, save_sun_plots.dir, save_filter_plots.dir,
 
     plot(NA, xlim = xlim, ylim = ylim, xaxt = "n", yaxt = "n", xlab = "", ylab = "")
     maps::map(map_ver, fill = TRUE, col = "grey90", bg = "white", xlim = xlim, ylim = ylim, add = T)
-    maps::map.axes()
+    map.axes()
     lines(cbind(before_speed$lon, before_speed$lat), col = "grey", lwd = 0.5)
     points(cbind(after_speed$lon, after_speed$lat), cex = 1, pch = 20, col = "firebrick", lwd = 1)
     points(cbind(before_speed$lon[!(before_speed$lon %in% after_speed$lon)], before_speed$lat[!(before_speed$lat %in% after_speed$lat)]), cex = 1, pch = 20, col = "cornflowerblue", lwd = 1)

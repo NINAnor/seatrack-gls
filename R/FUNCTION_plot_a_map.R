@@ -16,7 +16,6 @@ plot_a_map <- function(df) {
    latmax <- max(df$lat[df$eqfilter == 1]) + 10
    latmin <- min(df$lat[df$eqfilter == 1]) - 10
 
-   require(maps)
    plot(NA,
       xlim = c(lonmin, lonmax), ylim = c(latmin, latmax), xaxt = "n", yaxt = "n", xlab = "",
       ylab = ""
@@ -24,7 +23,7 @@ plot_a_map <- function(df) {
    maps::map(map_ver, fill = TRUE, col = "lightgray", bg = "white", xlim = c(lonmin, lonmax), ylim = c(latmin, latmax), add = T)
    mtext(ifelse(sum(names(args) %in% "xlab") == 1, args$xlab, "Longitude"), side = 1, line = 2.2, font = 3)
    mtext(ifelse(sum(names(args) %in% "ylab") == 1, args$ylab, "Latitude"), side = 2, line = 2.5, font = 3)
-   map.axes()
+   maps::map.axes()
    mtext(ifelse(sum(names(args) %in% "main") == 1, args$main, ""), line = 0.6, cex = 1.2)
    lines(df$lon, df$lat, col = "grey", lwd = 0.6)
    points(df$lon[df$eqfilter == 1 & month(df$date_time) %in% c(5, 6, 7)], df$lat[df$eqfilter == 1 & month(df$date_time) %in% c(5, 6, 7)], cex = 0.6, pch = 16, col = "forestgreen")

@@ -41,7 +41,7 @@ twilight_cleanup <- function(df, breedingloc_lon, breedingloc_lat, months_breedi
   rise <- ok[ok$type == 1, ]
   for (i in 1:length(rise$tFirst)) {
     return_to_false <- rise[rise$date == rise$date[i], ]
-    if (rise$remove[i] == TRUE & nrow(return_to_false) == 2 & (difftime(return_to_false$tFirst[2], return_to_false$tFirst[1], units = "hours")) > 22) {
+    if (rise$remove[i] == TRUE & nrow(return_to_false) == 2 && (difftime(return_to_false$tFirst[2], return_to_false$tFirst[1], units = "hours")) > 22) {
       rise$remove[rise$date == rise$date[i]] <- FALSE
     }
   }
@@ -50,7 +50,7 @@ twilight_cleanup <- function(df, breedingloc_lon, breedingloc_lat, months_breedi
   set <- ok[ok$type == 2, ]
   for (i in 1:length(set$tFirst)) {
     return_to_false <- set[set$date == set$date[i], ]
-    if (set$remove[i] == TRUE & nrow(return_to_false) == 2 & (difftime(return_to_false$tFirst[2], return_to_false$tFirst[1], units = "hours")) > 22) {
+    if (set$remove[i] == TRUE & nrow(return_to_false) == 2 && (difftime(return_to_false$tFirst[2], return_to_false$tFirst[1], units = "hours")) > 22) {
       set$remove[set$date == set$date[i]] <- FALSE
     }
   }
@@ -65,13 +65,12 @@ twilight_cleanup <- function(df, breedingloc_lon, breedingloc_lat, months_breedi
   ok <- together[order(together$DTime, decreasing = FALSE), ]
   ok2 <- ok[, 1:6]
   ###########################
-
   if (species %in% c(
     "Common eider", "common eider", "Somateria mollissima", "somateria mollissima",
     "Common murre", "Common guillemot", "Uria aalge",
     "common murre", "common guillemot", "uria aalge",
-    "Thick-billed murre", "Brünnich's guillemot", "Uria lomvia",
-    "thick-billed murre", "brünnich's guillemot", "uria lomvia",
+    "Thick-billed murre", "Br\u00FCnnich's guillemot", "Uria lomvia",
+    "thick-billed murre", "br\u00FCnnich's guillemot", "uria lomvia",
     "Pallas' murre", "Uria lomvia arra", "pallas' murre", "uria lomvia arra",
     "Little auk", "Dovekie", "Alle alle", "little auk", "dovekie", "alle alle",
     "Razorbill", "Razor-billed auk", "Lesser auk", "Alca torda",
@@ -324,8 +323,7 @@ twilight_cleanup <- function(df, breedingloc_lon, breedingloc_lat, months_breedi
     ok3$hours_dawn <- as.POSIXct(paste(as.Date(ok3$tFirst), " ", as.character(floor(ok3$hours_dawn)), ":", as.character(floor((ok3$hours_dawn - floor(ok3$hours_dawn)) * 60)), ":00", sep = ""), format = "%Y-%m-%d %H:%M:%S", tz = "UTC")
   }
 
-  # 14april2023: er det noe krøll her? Er logikken uansett feil?
-  ok3$predict <- abs(ok3$predict + ok3$test) # original code, prøver igjen 14april2023
+  ok3$predict <- abs(ok3$predict + ok3$test)
   # ok3$predict[ok3$type==1]<-abs(ok3$predict[ok3$type==1]+median(ok3$test[ok3$type==1])) #updated code 29april2022 - predicted times get right more often
   # ok3$predict[ok3$type==2]<-abs(ok3$predict[ok3$type==2]+median(ok3$test[ok3$type==2])) #updated code 29april2022 - predicted times get right more often
 

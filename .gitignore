@@ -1,4 +1,6 @@
 inst/doc
-.Rproj*
 before16sep24DESCRIPTION
 .Rproj.user
+.Rproj
+.RData
+.Rhistory
