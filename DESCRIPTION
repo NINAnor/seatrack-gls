@@ -2,8 +2,10 @@ Package: seatrackRgls
 Type: Package
 Title: An automated procedure used in the SEATRACK project to obtain positions from light-level geolocators in large- scale tracking of seabirds
 Version: 3.0
-Authors@R: 
+Authors@R: c(
     person("Vegard Sandøy", "Bråthen", email = "vegard.brathen@nina.no", role = c("cre","aut"),comment = c(ORCID = "0000-0002-7357-6727"))
+    person("Julian", "Evans", email = "julian.evans@nina.nl", role = "aut")
+)
 Author: Vegard Sandøy Bråthen <vegard.brathen@nina.no> 
 Maintainer: Vegard Sandøy Bråthen <vegard.brathen@nina.no> 
 Description: estimate up to two positions a day from light-level data from geolocators 
@@ -13,11 +15,56 @@ Description: estimate up to two positions a day from light-level data from geolo
     If allowed, the package saves plots to your local computer the aid a subjective calibration of sun elevation angles, 
     which is crucial for producing realistic latitudes. The script should be run twice. 
     First with a "best-guess" sun angle, then with the calibrated sun angle. 
-Depends: R (>= 3.2.3), devtools,readxl,mice,zoo,lubridate,GeoLight,roll,CircStats,circular,chron,suncalc,dplyr,argosfilter,baytrends,DescTools,tidyverse,maps,sf,spData,distancetocoast,raster,suntools,rnaturalearth
+Depends: 
+    R (>= 3.2.3),
+    devtools,
+    readxl,
+    mice,
+    zoo,
+    lubridate,
+    GeoLight,
+    roll,
+    CircStats,
+    circular,
+    chron,
+    suncalc,
+    dplyr,
+    argosfilter,
+    baytrends,
+    DescTools,
+    tidyverse,
+    maps,
+    sf,
+    spData,
+    distancetocoast,
+    raster,
+    suntools,
+    rnaturalearth
 License: GPL
 Encoding: UTF-8
 LazyData: true
-Imports: devtools,readxl,mice,zoo,lubridate,roll,CircStats,circular,chron,suncalc,dplyr,argosfilter,baytrends,DescTools,tidyverse,maps,sf,spData,raster,suntools,rnaturalearth
+Imports: 
+    devtools,
+    readxl,
+    mice,
+    zoo,
+    lubridate,
+    roll,
+    CircStats,
+    circular,
+    chron,
+    suncalc,
+    dplyr,
+    argosfilter,
+    baytrends,
+    DescTools,
+    tidyverse,
+    maps,
+    sf,
+    spData,
+    raster,
+    suntools,
+    rnaturalearth
 Remotes: SLisovski/GeoLight,
     distancetocoast=github::mdsumner/distancetocoast,
     GeoLocTools=github::SLisovski/GeoLocTools,
