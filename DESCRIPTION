@@ -1,7 +1,7 @@
 Package: seatrackRgls
 Type: Package
 Title: An automated procedure used in the SEATRACK project to obtain positions from light-level geolocators in large- scale tracking of seabirds
-Version: 2.1.0
+Version: 3.0
 Authors@R: 
     person("Vegard Sandøy", "Bråthen", email = "vegard.brathen@nina.no", role = c("cre","aut"),comment = c(ORCID = "0000-0002-7357-6727"))
 Author: Vegard Sandøy Bråthen <vegard.brathen@nina.no> 
