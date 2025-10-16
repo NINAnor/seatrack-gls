@@ -82,7 +82,7 @@ library(devtools) #install.packages('devtools')
 setwd("C:/Users/vegard.brathen/Norsk Polarinstitutt/Benjamin Merkel - SEATRACK - shared/Database/Imports_Positions_seatrackGLS/seatrackGLS")
 # Load seatrackGLS
 devtools::load_all(".")
-library(seatrackGLS)
+library(seatrackRgls)
 ```
 
 seatrackGLS relies on R functions from GeoLight, which is another R package made for geolocator processing. It is convenient to install the 'GeoLocTools', which is a compilation on packages that are used to process geolocator data - like FlightR, probGLS, SGAT, GeoLight etc.
