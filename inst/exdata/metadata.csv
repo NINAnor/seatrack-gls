@@ -1,0 +1,3 @@
+logger_id,logger_model,year_tracked,logger_producer,ring_number,country_code,species,colony,col_lon,col_lat,date_deployed,date_retrieved,light_threshold,sun_angle_start,sun_angle_end,file_name,analyzer,data_responsible,posdata_file,age_deployed
+C411,mk4083,2015_16,Biotrack,6211704,NOS,Black-legged kittiwake,Sklinna,10.995,65.202,11/06/2015,11/06/2017,1,-3.25,,C411_2017_mk4083.lig,,,,
+C411,mk4083,2016_17,Biotrack,6211704,NOS,Black-legged kittiwake,Sklinna,10.995,65.202,11/06/2015,11/06/2017,1,-3,-3,C411_2017_mk4083.lig,,,,
