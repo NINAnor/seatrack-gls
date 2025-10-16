@@ -1,10 +1,20 @@
-# this function:
-# 1: estimates twilights based on a threshold of 1 (BAS, Biotrack, Lotek) or 1 (Migrate Technology)
-# 2: clean up data based on a intitial sun angle of -5
-# 3: finds sun angle that corresponds to "summer track"
-#     -compares track calculated with various sun angles to similar dates an  "summer track" and finds the most similar track
-# 4: runs again with the most corresponding sun angle
-# 5: add missing dates to the "summer" track
+#' Estimate and Refine Winter Locations from GLS Data
+#'
+#' This function performs the following steps:
+#' \enumerate{
+#'   \item Estimates twilight times based on a threshold of 1 (for BAS, Biotrack, Lotek, or Migrate Technology devices).
+#'   \item Cleans up the data using an initial sun angle of -5 degrees.
+#'   \item Identifies the sun angle that best matches the "summer track" by comparing tracks calculated with various sun angles to similar dates in the "summer track" and selecting the most similar one.
+#'   \item Recalculates the track using the most corresponding sun angle.
+#'   \item Adds missing dates to the "summer" track.
+#' }
+#'
+#' @param data Input data containing GLS readings.
+#' @param threshold Numeric value for twilight estimation threshold.
+#' @param initial_sun_angle Initial sun angle used for data cleanup.
+#' @param summer_track Reference track for summer locations.
+#' @return A data frame with refined winter locations and updated summer track.
+#' @export
 winter_locations <- function(df, luxfile, speed, boundary.box, loess_filter_k, months_breeding, species,
                              midnightsun_removal, split_years, year_tracked, logger_id, date_deployed,
                              date_retrieved, man_equinox_periods, aut_equinox_periods) {
