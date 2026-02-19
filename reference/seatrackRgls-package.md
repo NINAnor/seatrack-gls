@@ -24,4 +24,4 @@ expert)
 
 Authors:
 
-- Julian Evans <julian.evans@nina.nl> (Code assistance)
+- Julian Evans <julian.evans@nina.no> (Code assistance)
