@@ -32,3 +32,7 @@
 #' @rdname example_data
 #' @concept data
 "example_extra_metadata"
+#' Per logger threshold settings
+#' List of different light thresholds depending on model
+#' @concept data
+"logger_light_thresholds"
