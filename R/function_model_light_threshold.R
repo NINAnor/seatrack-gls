@@ -8,7 +8,7 @@
 #' @keywords internal
 get_threshold <- function(model, mode = c("main", "summer")) {
     mode <- match.arg(mode)
-    thresholds <- logger_light_thresholds[[mode]]
+    thresholds <- seatrackRgls::logger_light_thresholds[[mode]]
     for (i in seq_along(thresholds)) {
         current_threshold <- thresholds[[i]]
         threshold_models <- current_threshold$models
