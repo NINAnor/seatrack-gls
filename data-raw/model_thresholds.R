@@ -35,7 +35,8 @@ main_thresholds <- list(
         "W30A9-SEA",
         "W30A9-SEA-NOT",
         "c65_NOT",
-        "c331"
+        "c331",
+        "c108"
     ), value = 11),
     threshold_9 = list(
         models = c(
