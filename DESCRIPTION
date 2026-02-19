@@ -4,7 +4,7 @@ Title: An automated procedure used in the SEATRACK project to obtain positions f
 Version: 0.3
 Authors@R: c(
     person("Vegard Sandøy", "Bråthen", email = "vegard.brathen@nina.no", role = c("cre","aut"),comment = c(ORCID = "0000-0002-7357-6727", note="Original creator, GLS expert")),
-    person("Julian", "Evans", email = "julian.evans@nina.nl", role = "aut", comment = c(note="Code assistance"))
+    person("Julian", "Evans", email = "julian.evans@nina.no", role = "aut", comment = c(note="Code assistance"))
     )
 Description: estimate up to two positions a day from light-level data from geolocators 
     (Lotek, BAS, Biotrack, Migrate Technology) using a threshold method. 

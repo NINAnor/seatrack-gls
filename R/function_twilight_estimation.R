@@ -32,12 +32,14 @@ twilight_estimation <- function(light_data, light_data_calibration, show_filter_
         }
     )
 
+    small_old_loggers <- c("f100", "c65")
+
     # among small migrate tech. loggers (c65, f100) some throw an error when running twilightCalc, the code below fixes that:
-    if (is.null(twilight_data) && light_data_calibration$logger_model %in% c("f100", "c65")) {
+    if (is.null(twilight_data) && light_data_calibration$logger_model %in% small_old_loggers) {
         light_data$lux <- log(lu$lux)
     }
 
-    if (is.null(twilight_data) && light_data_calibration$logger_model %in% c("f100", "c65")) {
+    if (is.null(twilight_data) && light_data_calibration$logger_model %in% small_old_loggers) {
         print("Trying alternative twilight calculation")
         twilight_data <- twilightCalc_bugfree(light_data$dtime,
             light_data$lux,

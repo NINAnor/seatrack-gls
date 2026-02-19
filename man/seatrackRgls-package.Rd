@@ -20,7 +20,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Julian Evans \email{julian.evans@nina.nl} (Code assistance)
+  \item Julian Evans \email{julian.evans@nina.no} (Code assistance)
 }
 
 }

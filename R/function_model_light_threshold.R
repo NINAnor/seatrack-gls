@@ -1,22 +1,21 @@
-get_threshold <- function(model) {
-    threshold_300 <- c(
-        "c330",
-        "f100",
-        "c250",
-        "c65",
-        "w65",
-        "Intigeo-P55B1-7",
-        "c65_super",
-        "Intigeo-P35A11-7-SGA-NOT",
-        "W65A9-SEA",
-        "W30A9-SEA",
-        "W30A9-SEA-NOT",
-        "c65_NOT",
-        "c331"
-    )
-    if (model %in% threshold_300) {
-        return(300)
-    } else {
-        return(50)
+#' get_threshold
+#'
+#' Get the light threshold for a given logger model and mode (main or summer).
+#'
+#' @param model The logger model for which to get the light threshold.
+#' @param mode The mode for which to get the light threshold, either "main" or "summer". Default is "main".
+#' @return The light threshold value for the specified logger model and mode.
+#' @keywords internal
+get_threshold <- function(model, mode = c("main", "summer")) {
+    mode <- match.arg(mode)
+    thresholds <- logger_light_thresholds[[mode]]
+    for (i in seq_along(thresholds)) {
+        current_threshold <- thresholds[[i]]
+        threshold_models <- current_threshold$models
+
+        if (tolower(model) %in% tolower(threshold_models) || length(threshold_models) == 0) {
+            return(current_threshold$value)
+        }
     }
+    stop("Error in getting threshold")
 }

@@ -41,7 +41,7 @@ apply_filters <- function(
     if (type == "main") {
         light_data_calibration$sun_angle_start[is.na(light_data_calibration$sun_angle_start)] <- -3.5
         light_data_calibration$sun_angle_end[is.na(light_data_calibration$sun_angle_end)] <- light_data_calibration$sun_angle_start[is.na(light_data_calibration$sun_angle_end)]
-        light_data_calibration$light_threshold[is.na(light_data_calibration$light_threshold)] <- 1
+        light_data_calibration$light_threshold[is.na(light_data_calibration$light_threshold)] <- get_threshold(light_data_calibration$logger_model, type)
     } else if (type == "winter") {
         if (calibration_mode) {
             light_data_calibration$sun_angle_start <- -5
@@ -53,7 +53,7 @@ apply_filters <- function(
             light_data_calibration$sun_angle_start <- 0
             light_data_calibration$sun_angle_end <- 0
         }
-        light_data_calibration$light_threshold <- get_threshold(light_data_calibration$logger_model)
+        light_data_calibration$light_threshold <- get_threshold(light_data_calibration$logger_model, type)
     }
 
     if (!is.null(light_data_calibration$breeding_start_month)) {
