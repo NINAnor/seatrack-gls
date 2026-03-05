@@ -4,7 +4,7 @@
 #'
 #' @param filepaths A vector of file paths to logger data files.
 #' @return A data frame containing the loaded light data.
-#' @keywords internal
+#' @concept function
 get_light_data <- function(filepaths) {
     # Taken from Vegard's original script
     # Reworking some of this to use column headers would make it more readable.

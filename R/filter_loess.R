@@ -9,7 +9,8 @@
 #' @export
 loess_filter <- function(posdata, logger_filter) {
     # Track must have a minimum length of 45 days
-    if (difftime(posdata$tFirst[length(posdata$tFirst)], posdata$tFirst[1], units = "days") > 45) {
+
+    if (length(posdata$tFirst) > 0 && !is.na(posdata$tFirst[length(posdata$tFirst)]) && !is.na(posdata$tFirst[1]) && difftime(posdata$tFirst[length(posdata$tFirst)], posdata$tFirst[1], units = "days") > 45) {
         print("Applying loess filter to position data")
         posdata_2 <- tryCatch(
             {

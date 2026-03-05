@@ -165,7 +165,7 @@ pos_change_subplot <- function(map_ver, xlim, ylim, before_pos, after_pos, befor
     # Set up background
     plot(NA, xlim = xlim, ylim = ylim, xaxt = "n", yaxt = "n", xlab = "", ylab = "")
 
-    maps::map(map_ver, fill = TRUE, col = "grey90", bg = "white", xlim = xlim, ylim = ylim, add = T)
+    maps::map(map_ver, fill = TRUE, col = "grey90", bg = "white", xlim = xlim, ylim = ylim, add = TRUE)
     maps::map.axes()
 
     # TRACK LINE
