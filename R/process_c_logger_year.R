@@ -72,12 +72,16 @@ process_logger_year <- function(
         logger_calibration_data$logger_model <- ""
     } else {
         model <- logger_calibration_data$logger_model[1]
+        if (is.na(model)) {
+            print("logger_model was NA, setting to empty string")
+            model <- ""
+        }
         if (nrow(file_info) > 1) {
             file_info <- file_info[tolower(file_info$logger_model) == tolower(model), ]
         }
         if (nrow(file_info) == 0) {
             stop(paste("No files found due to mismatch between logger model", model, "in metadata and filenames"))
-        } else if (!is.na(model) && !all(file_info$logger_model == model)) {
+        } else if (!all(file_info$logger_model == model)) {
             print(paste("Mismatch between logger model", model, "in metadata and filenames"))
         }
     }
