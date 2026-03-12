@@ -83,7 +83,7 @@ get_calibration_splits <- function(logger_data, split_years = "06-01") {
         all_years <- seq(start_year, end_year)
         missing_years <- all_years[!all_years %in% c(start_year, end_year)]
         split_dates <- paste(missing_years, split_years, sep = "-")
-        split_datetimes <- as.POSIXct(as.Date(split_dates))
+        split_datetimes <- as.POSIXct(as.Date(split_dates), tz = "UTC")
         all_dates <- c(start_datetime, split_datetimes, end_datetime)
 
         ends <- all_dates[-1] - as.difftime(1, units = "secs")

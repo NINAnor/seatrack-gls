@@ -74,7 +74,7 @@ twilightCalc_bugfree <- function(datetime, light, LightThreshold = TRUE, preSele
 
   results$allTwilights <- raw
 
-  opt <- data.frame(tFirst = as.POSIXct("1900-01-01 01:01", "UTC"), tSecond = as.POSIXct("1900-01-01 01:01", "UTC"), type = 0)
+  opt <- data.frame(tFirst = as.POSIXct("1900-01-01 01:01", tz = "UTC"), tSecond = as.POSIXct("1900-01-01 01:01", tz = "UTC"), type = 0)
   row <- 1
   for (k in 1:(nrow(out) - 1))
   {

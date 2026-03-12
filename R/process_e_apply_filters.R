@@ -120,6 +120,7 @@ apply_filters <- function(
     filtering$removed_twilight_cleanup <- (filtering$nrow_twilightCalc - nrow(twilight_data_tc))
     print(paste("Removed", filtering$removed_twilight_cleanup, "twilights during cleanup."))
 
+
     # detect outliers and move them back to mean of their neighbors
     twilight_data_mt <-
         export_filter_plot(
@@ -139,7 +140,6 @@ apply_filters <- function(
 
     filtering$moved_twilight_positions <- nrow(twilight_data_mt[!(twilight_data_mt$tFirst %in% twilight_data_tc$tFirst), ])
     print(paste("Moved", filtering$moved_twilight_positions, "twilight positions."))
-
     # daylengthfilter
     if (logger_filter$daylength_filter) {
         twilight_data_dl <-

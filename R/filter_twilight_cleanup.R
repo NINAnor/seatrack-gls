@@ -29,8 +29,8 @@
 #' @export
 twilight_cleanup <- function(df, breedingloc_lon, breedingloc_lat, months_breeding, species, show_plot, sun_angle_start, sun_angle_end, show_filter_plots = FALSE) {
   # datetime_conversion
-  df$time <- strftime(df$tFirst, format = "%H:%M:%S")
-  df$time_mins <- as.numeric(difftime(as.POSIXct(df$time, format = "%H:%M:%S"), as.POSIXct("00:00:00", format = "%H:%M:%S"), units = "min"))
+  df$time <- strftime(df$tFirst, format = "%H:%M:%S", tz = "UTC")
+  df$time_mins <- as.numeric(difftime(as.POSIXct(df$time, format = "%H:%M:%S", tz = "UTC"), as.POSIXct("00:00:00", format = "%H:%M:%S", tz = "UTC"), units = "min"))
 
   # find dates with too many twilights
   ok <- NULL

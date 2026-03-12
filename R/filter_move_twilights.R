@@ -284,15 +284,13 @@ move_twilights <- function(df, speed, sun, show_plot) {
   changes$month <- format(changes$tFirst, format = "%m")
   changes$day <- format(changes$tFirst, format = "%d")
   changes$changetodatetime <- paste(changes$year, "-", changes$month, "-", changes$day, " ", changes$hour, ":", changes$minute, ":", changes$second, sep = "")
-  changes$changetodatetime <- as.POSIXct(changes$changetodatetime, format = "%Y-%m-%d %H:%M:%S")
+  changes$changetodatetime <- as.POSIXct(changes$changetodatetime, format = "%Y-%m-%d %H:%M:%S", tz = "UTC")
+
   changes$tFirst[changes$change == TRUE] <- changes$changetodatetime[changes$change == TRUE]
   changes$tSecond[1:(length(changes$tFirst) - 1)] <- changes$tFirst[2:length(changes$tFirst)]
 
-
   df <- NULL
   df <- changes[, 1:3]
-
-
 
   # plot
   if (show_plot == TRUE) {
@@ -303,24 +301,31 @@ move_twilights <- function(df, speed, sun, show_plot) {
     after_changes <- after_changes[!is.na(after_changes$changetodatetime), ]
     after_changes$hours <- as.numeric(format(after_changes$changetodatetime, "%H")) + as.numeric(format(after_changes$changetodatetime, "%M")) / 60
 
-    line_after_change <- changes[, 1:3]
-    line_after_change <- line_after_change[!is.na(line_after_change$tFirst), ]
-    line_after_change$hours <- as.numeric(format(line_after_change[, 1], "%H")) + as.numeric(format(line_after_change[, 1], "%M")) / 60
+    # line_after_change <- changes[, 1:3]
+    # line_after_change <- line_after_change[!is.na(line_after_change$tFirst), ]
+    # line_after_change$hours <- as.numeric(format(line_after_change[, 1], "%H")) + as.numeric(format(line_after_change[, 1], "%M")) / 60
+    line_before_change <- before_changes[, 1:3]
+    line_before_change <- line_before_change[!is.na(line_before_change$tFirst), ]
+    line_before_change$hours <- as.numeric(format(line_before_change[, 1], "%H")) + as.numeric(format(line_before_change[, 1], "%M")) / 60
 
 
     plot(before_changes$tFirst, before_changes$hours, col = "grey", pch = 19, cex = 0.3, ylim = c(0, 26), yaxt = "n", xaxt = "n", ann = FALSE)
-    lines(line_after_change$tFirst[line_after_change$type == 1], line_after_change$hours[line_after_change$type == 1], col = "grey", lwd = 0.7)
-    lines(line_after_change$tFirst[line_after_change$type == 2], line_after_change$hours[line_after_change$type == 2], col = "grey", lwd = 0.7)
+    # lines(line_after_change$tFirst[line_after_change$type == 1], line_after_change$hours[line_after_change$type == 1], col = "grey", lwd = 0.7)
+    # lines(line_after_change$tFirst[line_after_change$type == 2], line_after_change$hours[line_after_change$type == 2], col = "grey", lwd = 0.7)
+
+    lines(line_before_change$tFirst[line_before_change$type == 1], line_before_change$hours[line_before_change$type == 1], col = "grey", lwd = 0.7)
+    lines(line_before_change$tFirst[line_before_change$type == 2], line_before_change$hours[line_before_change$type == 2], col = "grey", lwd = 0.7)
+
     mtext(side = 1, text = "Month", line = 1, cex = 0.7)
     mtext(side = 2, text = "Time of day (GMT)", line = 1, cex = 0.7)
-    points(before_changes$tFirst[before_changes$change == TRUE], before_changes$hours[before_changes$change == TRUE], cex = 0.3, col = "firebrick", pch = 19)
+    points(before_changes$tFirst[before_changes$change == TRUE], before_changes$hours[before_changes$change == TRUE], cex = 0.4, col = "firebrick", pch = 19)
     points(after_changes$tFirst, after_changes$hours, col = "cornflowerblue", pch = 19, cex = 0.3)
+
     daterange <- c(as.POSIXlt(min(before_changes$tFirst)), as.POSIXlt(max(before_changes$tFirst)))
     axis.POSIXct(1, at = seq(daterange[1], daterange[2], by = "month"), format = "%b", cex.axis = 0.6, tck = -0.02, mgp = c(3, 0, 0))
     axis(side = 2, at = c(1:24), labels = c(1:24), tck = -0.02, cex.axis = 0.6, las = 2, mgp = c(3, 0.3, 0))
     legend("top", legend = c("unaffected twilights", "original twilight", "new twilight"), horiz = TRUE, col = c("grey", "firebrick", "cornflowerblue"), pch = 19, cex = 0.3)
   }
-
 
   output <- na.omit(df)
   return(output)

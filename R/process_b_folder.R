@@ -82,7 +82,12 @@ process_folder <- function(
         }
     }
     if (calibration_mode) {
+        if (length(all_result) == 0) {
+            print("No calibration data generated. Nothing will be exported.")
+            return(invisible())
+        }
         all_calibration <- do.call(rbind, all_result)
+
         calibration_output_dir <- file.path(output_dir, "calibration_data")
         if (export_calibration_template && !file.exists(calibration_output_dir)) {
             # do some workbook formattign to make it easier to fill in
