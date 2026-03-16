@@ -15,4 +15,4 @@ A data frame containing the loaded light data.
 \description{
 Loads light data from specified file paths. Will handle different file formats based on file extensions.
 }
-\keyword{internal}
+\concept{function}

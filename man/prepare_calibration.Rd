@@ -19,7 +19,7 @@ prepare_calibration(
 
 \item{metadata}{A data frame containing calibration data for all loggers or a string providing a filepath to read this data from. This can be from an excel file, CSV file or a directory containing multiple calibration files.
 This dataframe can consist of a single row per logger/year combination, with the following columns \code{logger_id}, \code{species}, \code{colony}, \code{date_deployed} and \code{date_retrieved}. Providing \code{logger_model} is strongly advised.
-These will be automatically split into time windows, using the \code{year_split} setting (defaulting to "01-06" in all 'seatrack_settings_list').
+These will be automatically split into time windows, using the \code{year_split} setting (defaulting to "06-01" in all 'seatrack_settings_list').
 Alternatively, custom time windows can be provided by including columns \code{start_datetime} and \code{end_datetime}, with one time window per row.}
 
 \item{all_colony_info}{A data frame containing colony information for all loggers (one row per colony). The required columns are \code{colony}, \code{latitude}, and \code{longitude}.}
