@@ -39,7 +39,7 @@ process_logger_year <- function(
     output_dir = NULL,
     calibration_mode = TRUE,
     analyzer = "") {
-    print(paste("Processing logger", logger_id, "for year", year))
+    print(paste("Processing logger", logger_id, "for retrieval year", year))
     file_info <- scan_import_dir(import_directory)
     file_info <- file_info[file_info$logger_id == logger_id & file_info$year_downloaded == year, ]
 

@@ -15,7 +15,7 @@ loess_filter <- function(posdata, logger_filter) {
         posdata_2 <- tryCatch(
             {
                 loess_filter <- GeoLight::loessFilter(posdata$tFirst, posdata$tSecond, posdata$type, k = logger_filter$loess_filter_k, plot = FALSE)
-                return(posdata[loess_filter, ])
+                posdata[loess_filter, ]
             },
             error = function(e) {
                 print(paste("Error in loess filter:", e))

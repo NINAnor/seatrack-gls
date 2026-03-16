@@ -85,7 +85,7 @@ process_logger_light_data <- function(
                     if (calibration_mode) {
                         process_result$problem <- FALSE
                     }
-                    return(process_result)
+                    process_result
                 },
                 error = function(e) {
                     print(paste("Error in processing:", e))
@@ -100,7 +100,7 @@ process_logger_light_data <- function(
                 }
             )
         }
-
+        print(paste("Finished processing calibration window", i, "of", nrow(logger_calibration_data)))
         result <- result[!sapply(result, is.null)]
         all_results <- c(all_results, list(result))
     }
