@@ -30,6 +30,12 @@ process_folder <- function(
         calibration_data <- read_cal_files(calibration_data)
     }
 
+    calibration_output_dir <- file.path(output_dir, "calibration_data")
+    if (file.exists(calibration_output_dir)) {
+        print(paste("Calibration output directory", calibration_output_dir, "already exists, not overwriting existing calibration file."))
+        return()
+    }
+
     file_info <- scan_import_dir(import_directory)
     if (nrow(file_info) == 0) {
         print("No light files found in import diretory.")
@@ -88,12 +94,10 @@ process_folder <- function(
         }
         all_calibration <- do.call(rbind, all_result)
 
-        calibration_output_dir <- file.path(output_dir, "calibration_data")
+
         if (export_calibration_template && !file.exists(calibration_output_dir)) {
             # do some workbook formattign to make it easier to fill in
             calibration_to_wb(all_calibration, calibration_output_dir, "calibration.xlsx")
-        } else if (file.exists(calibration_output_dir)) {
-            print(paste("Calibration output directory", calibration_output_dir, "already exists, not overwriting existing calibration file."))
         }
 
         return(all_calibration)
