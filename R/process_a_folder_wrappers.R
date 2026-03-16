@@ -9,7 +9,7 @@
 #' @param import_directory Directory containing raw light data files. These are expected to be named in the format `<logger_id>_<year_retrieved>_<logger_model>`, e.g. `C23_2015_mk4083`
 #' @param metadata A data frame containing calibration data for all loggers or a string providing a filepath to read this data from. This can be from an excel file, CSV file or a directory containing multiple calibration files.
 #' This dataframe can consist of a single row per logger/year combination, with the following columns `logger_id`, `species`, `colony`, `date_deployed` and `date_retrieved`. Providing `logger_model` is strongly advised.
-#' These will be automatically split into time windows, using the `year_split` setting (defaulting to "01-06" in all 'seatrack_settings_list').
+#' These will be automatically split into time windows, using the `year_split` setting (defaulting to "06-01" in all 'seatrack_settings_list').
 #' Alternatively, custom time windows can be provided by including columns `start_datetime` and `end_datetime`, with one time window per row.
 #' @param all_colony_info A data frame containing colony information for all loggers (one row per colony). The required columns are `colony`, `latitude`, and `longitude`.
 #' @param output_directory Directory to save calibration templates and calibration plots. If `show_filter_plots` is `TRUE`
