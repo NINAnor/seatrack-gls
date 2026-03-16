@@ -102,12 +102,12 @@ The final positions are now exported to your `output_dir`.
 ``` r
 head(positions)
 #>   logger_id logger_id_year total_years_tracked logger_model start_datetime
-#> 1      C411      C411_2016           2015_2016       mk4083     2015-06-12
-#> 2      C411      C411_2016           2015_2016       mk4083     2015-06-12
-#> 3      C411      C411_2016           2015_2016       mk4083     2015-06-12
-#> 4      C411      C411_2016           2015_2016       mk4083     2015-06-12
-#> 5      C411      C411_2016           2015_2016       mk4083     2015-06-12
-#> 6      C411      C411_2016           2015_2016       mk4083     2015-06-12
+#> 1      C411      C411_2017           2015_2017       mk4083     2015-06-12
+#> 2      C411      C411_2017           2015_2017       mk4083     2015-06-12
+#> 3      C411      C411_2017           2015_2017       mk4083     2015-06-12
+#> 4      C411      C411_2017           2015_2017       mk4083     2015-06-12
+#> 5      C411      C411_2017           2015_2017       mk4083     2015-06-12
+#> 6      C411      C411_2017           2015_2017       mk4083     2015-06-12
 #>          end_datetime year_tracked                species
 #> 1 2016-01-05 23:59:59    2015_2016 Black-legged kittiwake
 #> 2 2016-01-05 23:59:59    2015_2016 Black-legged kittiwake
@@ -164,6 +164,13 @@ head(positions)
 #> 4 Kate Kittiwake     2017-06-11        Biotrack     6211704          NOS
 #> 5 Kate Kittiwake     2017-06-11        Biotrack     6211704          NOS
 #> 6 Kate Kittiwake     2017-06-11        Biotrack     6211704          NOS
+#>          raw_data_file
+#> 1 C411_2017_mk4083.lig
+#> 2 C411_2017_mk4083.lig
+#> 3 C411_2017_mk4083.lig
+#> 4 C411_2017_mk4083.lig
+#> 5 C411_2017_mk4083.lig
+#> 6 C411_2017_mk4083.lig
 ```
 
 Note our extra metadata appended to the end.
@@ -185,3 +192,15 @@ It is worth examining the filter plots too.
 ![](example_files/figure-html/filterplot_5-1.png)
 
 ![](example_files/figure-html/filterplot_6-1.png)
+
+![](example_files/figure-html/filterplot_7-1.png)
+
+![](example_files/figure-html/filterplot_8-1.png)
+
+![](example_files/figure-html/filterplot_9-1.png)
+
+![](example_files/figure-html/filterplot_10-1.png)
+
+![](example_files/figure-html/filterplot_11-1.png)
+
+![](example_files/figure-html/filterplot_12-1.png)
