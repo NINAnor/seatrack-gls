@@ -46,10 +46,10 @@ process_logger_light_data <- function(
             return(NULL)
         }
     )
-    if (!is.null(all_light_data)){
+    if (!is.null(all_light_data)) {
         print("Limit light data to calibration time windows...")
         light_data_split <- limit_light_data(all_light_data, logger_calibration_data)
-    }else {
+    } else {
         light_data_split <- rep(list(data.frame()), nrow(logger_calibration_data))
     }
 
@@ -57,10 +57,11 @@ process_logger_light_data <- function(
     all_results <- list()
 
     for (i in seq_along(light_data_split)) {
-        print(paste("Processing calibration window", i, "of", nrow(logger_calibration_data)))
         light_data <- light_data_split[[i]]
         light_data_calibration <- logger_calibration_data[i, ]
         logger_filter <- filter_setting_list$get_settings_from_list(species = light_data_calibration$species[1], colony = light_data_calibration$colony[1], logger_id = light_data_calibration$logger_id[1], years_tracked = light_data_calibration$years_tracked[1])
+
+        print(paste(light_data_calibration$logger_id[1], " - Processing calibration window", i, "of", nrow(logger_calibration_data), "-", light_data_calibration$years_tracked[1]))
 
         if (nrow(light_data) < min_length) {
             print(paste("Light data has only", nrow(light_data), "rows, skipping."))
