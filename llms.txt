@@ -137,6 +137,8 @@ General utility functions
 
 - [`calibration_to_wb()`](https://ninanor.github.io/seatrackRgls/reference/calibration_to_wb.md)
   : Write Calibration Data to Excel Workbook
+- [`get_light_data()`](https://ninanor.github.io/seatrackRgls/reference/get_light_data.md)
+  : Load lightdata from files
 
 # Articles
 

@@ -43,7 +43,7 @@ prepare_calibration(
   `colony`, `date_deployed` and `date_retrieved`. Providing
   `logger_model` is strongly advised. These will be automatically split
   into time windows, using the `year_split` setting (defaulting to
-  "01-06" in all 'seatrack_settings_list'). Alternatively, custom time
+  "06-01" in all 'seatrack_settings_list'). Alternatively, custom time
   windows can be provided by including columns `start_datetime` and
   `end_datetime`, with one time window per row.
 

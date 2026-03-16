@@ -69,7 +69,7 @@ If <code>export_calibration_template</code> is <code>TRUE</code>, it will export
 <dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
 <dd><p>A data frame containing calibration data for all loggers or a string providing a filepath to read this data from. This can be from an excel file, CSV file or a directory containing multiple calibration files.
 This dataframe can consist of a single row per logger/year combination, with the following columns <code>logger_id</code>, <code>species</code>, <code>colony</code>, <code>date_deployed</code> and <code>date_retrieved</code>. Providing <code>logger_model</code> is strongly advised.
-These will be automatically split into time windows, using the <code>year_split</code> setting (defaulting to "01-06" in all 'seatrack_settings_list').
+These will be automatically split into time windows, using the <code>year_split</code> setting (defaulting to "06-01" in all 'seatrack_settings_list').
 Alternatively, custom time windows can be provided by including columns <code>start_datetime</code> and <code>end_datetime</code>, with one time window per row.</p></dd>
 
 
