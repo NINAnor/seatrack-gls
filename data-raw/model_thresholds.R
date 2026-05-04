@@ -14,7 +14,9 @@ summer_thresholds <- list(
             "W30A9-SEA-NOT",
             "c65_NOT",
             "c331",
-            "c108"
+            "c108",
+            "LAT",
+            "LAT2800S"
         ),
         value = 300
     ),
@@ -46,7 +48,7 @@ main_thresholds <- list(
         ),
         value = 9
     ),
-    threshold_150 = list(models = c("LAT2000"), value = 150),
+    threshold_150 = list(models = c("LAT2000", "LAT", "LAT2800S"), value = 150),
     default = list(models = c(), value = 1)
 )
 

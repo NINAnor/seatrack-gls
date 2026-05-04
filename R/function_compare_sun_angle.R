@@ -5,11 +5,12 @@
 #' @param prev_posdata_export A data frame containing previous position data export with columns `eqfilter`, `lat`, `type`, and `date_time`.
 #' @param new_posdata_export A data frame containing new position data export with columns `tFirst`, `tSecond`, `type`.
 #' @param type A string indicating the type of sun angle sequence to use. Options are `"general"`, `"summer"`, or `"winter"`.
+#' @param model A string indicating the logger model. If the model is "LAT" or "LAT2800S", it retrieves the sun angles specific to those models. Default is an empty string.
 #' @return A list containing the optimal sun angles for the start and end of the track: `sun_angle_start` and `sun_angle_end`.
 #' @keywords internal
-compare_sun_angle <- function(prev_posdata_export, new_posdata_export, type) {
+compare_sun_angle <- function(prev_posdata_export, new_posdata_export, type, model = "") {
     main_data <- prev_posdata_export[prev_posdata_export$eqfilter == 1 & !is.na(prev_posdata_export$lat) & prev_posdata_export$type == 1, ]
-    sun_angle_seq <- seatrackRgls::sun_angles[[type]]
+    sun_angle_seq <- get_sun_angle(type, model)
     compare_tracks <- data.frame(sun.angle = sun_angle_seq)
     compare_tracks$start_of_track <- NA
     compare_tracks$end_of_track <- NA
@@ -32,7 +33,7 @@ compare_sun_angle <- function(prev_posdata_export, new_posdata_export, type) {
     }
     sun_angle_start <- compare_tracks$sun.angle[compare_tracks$start_of_track == min(compare_tracks$start_of_track, na.rm = TRUE)][1]
     sun_angle_end <- compare_tracks$sun.angle[compare_tracks$end_of_track == min(compare_tracks$end_of_track, na.rm = TRUE)][1]
-    if (is.null(sun_angle_start) | is.na(sun_angle_start)) {
+    if (is.null(sun_angle_start) || is.na(sun_angle_start)) {
         stop("NULL")
     }
     return(list(sun_angle_start = sun_angle_start, sun_angle_end = sun_angle_end))

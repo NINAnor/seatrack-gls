@@ -4,7 +4,7 @@
 \alias{compare_sun_angle}
 \title{Compare Sun Angles to Optimize Position Estimation}
 \usage{
-compare_sun_angle(prev_posdata_export, new_posdata_export, type)
+compare_sun_angle(prev_posdata_export, new_posdata_export, type, model = "")
 }
 \arguments{
 \item{prev_posdata_export}{A data frame containing previous position data export with columns \code{eqfilter}, \code{lat}, \code{type}, and \code{date_time}.}
@@ -12,6 +12,8 @@ compare_sun_angle(prev_posdata_export, new_posdata_export, type)
 \item{new_posdata_export}{A data frame containing new position data export with columns \code{tFirst}, \code{tSecond}, \code{type}.}
 
 \item{type}{A string indicating the type of sun angle sequence to use. Options are \code{"general"}, \code{"summer"}, or \code{"winter"}.}
+
+\item{model}{A string indicating the logger model. If the model is "LAT" or "LAT2800S", it retrieves the sun angles specific to those models. Default is an empty string.}
 }
 \value{
 A list containing the optimal sun angles for the start and end of the track: \code{sun_angle_start} and \code{sun_angle_end}.

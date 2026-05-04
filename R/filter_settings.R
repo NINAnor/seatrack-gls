@@ -62,21 +62,21 @@ GLSsettings <- R6::R6Class(
         check_settings_for = function(species = NULL, logger_id = NULL, colony = NULL, years_tracked = NULL) {
             if (!is.null(logger_id)) {
                 if (!is.null(self$logger_id)) {
-                    if (self$logger_id != tolower(logger_id)) {
+                    if (tolower(self$logger_id) != tolower(logger_id)) {
                         return(FALSE)
                     }
                 }
             }
             if (!is.null(species)) {
                 if (!is.null(self$species)) {
-                    if (self$species != tolower(species)) {
+                    if (tolower(self$species) != tolower(species)) {
                         return(FALSE)
                     }
                 }
             }
             if (!is.null(colony)) {
                 if (!is.null(self$colony)) {
-                    if (self$colony != tolower(colony)) {
+                    if (tolower(self$colony) != tolower(colony)) {
                         return(FALSE)
                     }
                 }
