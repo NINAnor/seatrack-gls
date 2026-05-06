@@ -5,17 +5,21 @@
 \title{Prepare Calibration Data from a Folder}
 \usage{
 prepare_calibration(
-  import_directory,
+  import_directory = NULL,
+  light_data_list = NULL,
   metadata,
   all_colony_info,
   output_directory,
   show_filter_plots = FALSE,
   export_calibration_template = TRUE,
-  filter_setting_list = seatrackRgls::seatrack_settings_list
+  filter_setting_list = seatrackRgls::seatrack_settings_list,
+  overwrite_calibration = FALSE
 )
 }
 \arguments{
 \item{import_directory}{Directory containing raw light data files. These are expected to be named in the format \verb{<logger_id>_<year_retrieved>_<logger_model>}, e.g. \code{C23_2015_mk4083}}
+
+\item{light_data_list}{A named list of data frames containing light data for each logger/year combination. List names are assumed to be logger serial numbers. If not provided, light data will be loaded from the import directory based on the logger ID and year.}
 
 \item{metadata}{A data frame containing calibration data for all loggers or a string providing a filepath to read this data from. This can be from an excel file, CSV file or a directory containing multiple calibration files.
 This dataframe can consist of a single row per logger/year combination, with the following columns \code{logger_id}, \code{species}, \code{colony}, \code{date_deployed} and \code{date_retrieved}. Providing \code{logger_model} is strongly advised.
@@ -31,6 +35,8 @@ Alternatively, custom time windows can be provided by including columns \code{st
 \item{export_calibration_template}{When \code{TRUE} will export a calibration template in excel format. Otherwise returns the calibration template as an R object. Defaults to \code{TRUE}.}
 
 \item{filter_setting_list}{A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using \code{\link[=read_filter_file]{read_filter_file()}}. Defaults to 'seatrackRgls::seatrack_settings_list'.}
+
+\item{overwrite_calibration}{A logical indicating whether to overwrite existing calibration output. Defaults to \code{FALSE}. If \code{FALSE}, if a calibration output directory already exists, the function will skip processing and return.}
 }
 \description{
 Convience function for preparing GLS logger data for light data calibration. Uses \code{process_folder()} in calibration mode to handle a directory of light data. See 'process_folder()' for more details.

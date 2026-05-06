@@ -7,6 +7,7 @@
 #' @param logger_calibration_data A data frame containing calibration data for the logger. If multiple calibration windows are provided, each will be processed in sequence.
 #' @param filter_setting_list A list of filter settings for different species. Defaults to `seatrack_settings_list`.
 #' @param logger_colony_info A data frame containing colony information for the logger.
+#' @param all_light_data An optional data frame containing all light data for the logger. If not provided, light data will be loaded from the filepaths.
 #' @param logger_extra_metadata A data frame containing extra metadata for the logger.
 #' @param show_filter_plots A logical indicating whether to show filter plots. Defaults to FALSE.
 #' @param plotting_dir An optional directory path to save plotting outputs. Defaults to NULL.
@@ -24,6 +25,7 @@ process_logger_light_data <- function(
     logger_calibration_data,
     filter_setting_list,
     logger_colony_info,
+    all_light_data = NULL,
     logger_extra_metadata = NULL,
     show_filter_plots = FALSE,
     plotting_dir = NULL,
@@ -34,18 +36,18 @@ process_logger_light_data <- function(
         dir.create(plotting_dir, recursive = TRUE)
     }
 
-    # if there is more than one light file,
-    # First check the logger model
-    print("Load light data...")
-    all_light_data <- tryCatch(
-        {
-            get_light_data(filepaths)
-        },
-        error = function(e) {
-            print(paste("Error loading file:", e))
-            return(NULL)
-        }
-    )
+    if (is.null(all_light_data)) {
+        print("Load light data...")
+        all_light_data <- tryCatch(
+            {
+                get_light_data(filepaths)
+            },
+            error = function(e) {
+                print(paste("Error loading file:", e))
+                return(NULL)
+            }
+        )
+    }
     if (!is.null(all_light_data)) {
         print("Limit light data to calibration time windows...")
         light_data_split <- limit_light_data(all_light_data, logger_calibration_data)
@@ -115,7 +117,19 @@ process_logger_light_data <- function(
             combined_posdata_export$raw_data_file <- basename(filepaths[1])
         }
 
-        combined_filtering <- do.call(rbind, lapply(all_results, function(x) x$filtering))
+        filtering_list <- lapply(all_results, function(x) x$filtering)
+        filtering_list <- filtering_list[!sapply(filtering_list, is.null)]
+        if (length(filtering_list) == 0) {
+            combined_filtering <- NULL
+        } else {
+            all_filtering_cols <- unique(unlist(lapply(filtering_list, names)))
+            filtering_list <- lapply(filtering_list, function(df) {
+                missing_cols <- setdiff(all_filtering_cols, names(df))
+                if (length(missing_cols)) df[missing_cols] <- NA
+                df[all_filtering_cols]
+            })
+            combined_filtering <- do.call(rbind, filtering_list)
+        }
 
         return(list(
             twilight_estimates = combined_twilight_estimates,

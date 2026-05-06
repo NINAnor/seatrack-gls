@@ -1,6 +1,6 @@
 ﻿literature_speed;speed;boundary.box;coast_to_land;coast_to_sea;loess_filter_k;months_breeding;species;latin;split_years;noon_filter;daylength_filter;midnightsun_removal
 Pennycuick 1997, Edwards et al. 2013;70;c(-95,100,30,88);100;Inf;6;c(4,5,6,7,8);Black-legged kittiwake;Rissa tridactyla;06-01;TRUE;TRUE;TRUE
-Pennycuick 1997;90;c(-110,100,-80,88);100;Inf;10;c(5,6,7,8,9);Arctic tern;Sterna paradisaea;06-01;TRUE;TRUE;TRUE
+Pennycuick 1997;90;c(-180,180,-80,88);100;Inf;10;c(5,6,7,8,9);Arctic tern;Sterna paradisaea;06-01;TRUE;TRUE;TRUE
 Pennycuick 1997;20;c(-30,50,35,88);100;Inf;1;c(4,5,6,7,8);Common eider;Somateria mollissima;06-01;TRUE;TRUE;TRUE
 Pennycuick 1997;40;c(-180,180,-85,-49);Inf;Inf;6;c(10,11,12,1,2);Snow petrel;Pagodroma nivea;06-01;TRUE;TRUE;TRUE
 Pennycuick 1997;30;c(-110,90,35,88);100;Inf;3;c(4,5,6,7,8,9);Brünnich's guillemot;Uria lomvia;06-01;TRUE;TRUE;TRUE

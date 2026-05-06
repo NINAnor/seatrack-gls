@@ -11,6 +11,7 @@
 #' In calibration mode, the minimum required columns are `logger_id`, `species`, `colony`, `date_deployed` and `date_retrieved`. Providing `logger_model` is strongly advised.
 #' If not in calibration mode, the data frame is expected to be in the format output by running this function in calibration mode.
 #' @param all_colony_info A data frame containing colony information for all loggers (one row per colony). The required columns are `colony`, `latitude`, and `longitude`.
+#' @param light_data_list A named list of data frames containing light data for each logger/year combination. List names are assumed to be logger serial numbers. If not provided, light data will be loaded from the import directory based on the logger ID and year.
 #' @param filter_setting_list A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using 'read_filter_file()'. Defaults to 'seatrack_settings_list'.
 #' @param extra_metadata Optional data frame containing extra metadata for loggers. This must have the column `logger_id` to join extra metadata. A `year_retrieved` column can also be provided to join based on a combination of logger and which session this is.
 #' @param show_filter_plots A logical indicating whether to show filter plots. Defaults to `FALSE`.
@@ -20,26 +21,39 @@
 #' If `FALSE`, the function exports processed position data, filtering summaries, and twilight estimates for
 #' each logger/year combination.
 #' @param export_calibration_template A logical indicating whether to export an excel calibration template. Defaults to `TRUE`. If `FALSE`, the calibration template is returned.
+#' @param overwrite_calibration A logical indicating whether to overwrite existing calibration output. Defaults to `FALSE`. If `FALSE`, if a calibration output directory already exists, the function will skip processing and return.
 #' @concept processing
 #' @export
 process_folder <- function(
-    import_directory, calibration_data, all_colony_info,
+    import_directory = NULL, calibration_data, all_colony_info, light_data_list = NULL,
     filter_setting_list = seatrackRgls::seatrack_settings_list, extra_metadata = NULL, show_filter_plots = FALSE,
-    output_dir = NULL, calibration_mode = TRUE, export_calibration_template = TRUE) {
+    output_dir = NULL, calibration_mode = TRUE, export_calibration_template = TRUE, overwrite_calibration = FALSE) {
+    if (is.null(import_directory) && is.null(light_data_list)) {
+        stop("Either import_directory or light_data_list must be provided.")
+    }
     if (is.character(calibration_data)) {
         calibration_data <- read_cal_files(calibration_data)
     }
 
     calibration_output_dir <- file.path(output_dir, "calibration_data")
-    if (file.exists(calibration_output_dir)) {
+    if (calibration_mode && export_calibration_template && file.exists(calibration_output_dir) && !overwrite_calibration) {
         print(paste("Calibration output directory", calibration_output_dir, "already exists, not overwriting existing calibration file."))
         return()
     }
 
-    file_info <- scan_import_dir(import_directory)
-    if (nrow(file_info) == 0) {
-        print("No light files found in import diretory.")
-        return(NULL)
+    if (!is.null(light_data_list)) {
+        print("Using provided light data list.")
+        file_info <- data.frame(
+            logger_id = names(light_data_list),
+            year_downloaded = sapply(light_data_list, function(x) format(max(x$date), "%Y"))
+        )
+        file_info$id_year <- paste0(file_info$logger_id, "_", file_info$year_downloaded)
+    } else {
+        file_info <- scan_import_dir(import_directory)
+        if (nrow(file_info) == 0) {
+            print("No light files found in import diretory.")
+            return(NULL)
+        }
     }
     all_logger_id_year <- file_info[!duplicated(file_info$id_year), ]
     print(paste("Found", nrow(all_logger_id_year), "unique logger ID + year combinations."))
@@ -70,10 +84,16 @@ process_folder <- function(
     for (logger_idx in seq_len(nrow(all_logger_id_year))) {
         logger_id <- all_logger_id_year$logger_id[logger_idx]
         year <- all_logger_id_year$year_downloaded[logger_idx]
+        if (!is.null(light_data_list)) {
+            logger_light_data <- light_data_list[[logger_idx]]
+        } else {
+            logger_light_data <- NULL
+        }
         result <- process_logger_year(
             logger_id = logger_id,
             year = year,
             import_directory = import_directory,
+            logger_light_data = logger_light_data,
             calibration_data = calibration_data,
             filter_setting_list = filter_setting_list,
             all_colony_info = all_colony_info,

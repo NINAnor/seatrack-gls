@@ -10,7 +10,7 @@ get_sun_angle <- function(type = "general", model = "") {
         type <- "general"
     }
     if (tolower(model) %in% tolower(c("LAT", "LAT2800S"))) {
-        angle <- seatrackRgls::sun_angles_LAT[[type]]
+        angles <- seatrackRgls::sun_angles_LAT[[type]]
     } else {
         angles <- seatrackRgls::sun_angles[[type]]
     }

@@ -9,7 +9,7 @@
 #' @return A list containing the optimal sun angles for the start and end of the track: `sun_angle_start` and `sun_angle_end`.
 #' @keywords internal
 compare_sun_angle <- function(prev_posdata_export, new_posdata_export, type, model = "") {
-    main_data <- prev_posdata_export[prev_posdata_export$eqfilter == 1 & !is.na(prev_posdata_export$lat) & prev_posdata_export$type == 1, ]
+    main_data <- prev_posdata_export[prev_posdata_export$eqfilter & !is.na(prev_posdata_export$lat) & prev_posdata_export$type == 1, ]
     sun_angle_seq <- get_sun_angle(type, model)
     compare_tracks <- data.frame(sun.angle = sun_angle_seq)
     compare_tracks$start_of_track <- NA

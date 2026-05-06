@@ -5,16 +5,20 @@
 \title{Process Positions from a Folder}
 \usage{
 process_positions(
-  import_directory,
+  import_directory = NULL,
+  light_data_list = NULL,
   calibration_data,
   all_colony_info,
   output_directory,
   extra_metadata = NULL,
-  filter_setting_list = seatrackRgls::seatrack_settings_list
+  filter_setting_list = seatrackRgls::seatrack_settings_list,
+  show_filter_plots = TRUE
 )
 }
 \arguments{
 \item{import_directory}{Directory containing raw light data files. These are expected to be named in the format \verb{<logger_id>_<year_retrieved>_<logger_model>}, e.g. \code{C23_2015_mk4083}}
+
+\item{light_data_list}{A named list of data frames containing light data for each logger/year combination. List names are assumed to be logger serial numbers. If not provided, light data will be loaded from the import directory based on the logger ID and year.}
 
 \item{calibration_data}{Data frame containing calibration data for loggers or a path pointing to the calibration data, as created by prepare_calibration().}
 
@@ -25,6 +29,8 @@ process_positions(
 \item{extra_metadata}{Optional data frame containing extra metadata for loggers. This must have the column \code{logger_id} to join extra metadata. A \code{year_retrieved} column can also be provided to join based on a combination of logger and which session this is.}
 
 \item{filter_setting_list}{A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using 'read_filter_file()'. Defaults to 'seatrack_settings_list'.}
+
+\item{show_filter_plots}{A logical indicating whether to show individual filter plots for the default sun angle. Defaults to \code{TRUE}.}
 }
 \description{
 Convience function for processing GLS logger data using provided calibration values. Uses 'process_folder()' to process a folder of light data. See 'process_folder()' for more details.

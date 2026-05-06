@@ -7,6 +7,7 @@
 #' Will export calibration plots to assist in choosing appropriate sun angles for processing GLS logger data (see vignette). Once these are decided on, final positions can be exported using process_positions()
 #'
 #' @param import_directory Directory containing raw light data files. These are expected to be named in the format `<logger_id>_<year_retrieved>_<logger_model>`, e.g. `C23_2015_mk4083`
+#' @param light_data_list A named list of data frames containing light data for each logger/year combination. List names are assumed to be logger serial numbers. If not provided, light data will be loaded from the import directory based on the logger ID and year.
 #' @param metadata A data frame containing calibration data for all loggers or a string providing a filepath to read this data from. This can be from an excel file, CSV file or a directory containing multiple calibration files.
 #' This dataframe can consist of a single row per logger/year combination, with the following columns `logger_id`, `species`, `colony`, `date_deployed` and `date_retrieved`. Providing `logger_model` is strongly advised.
 #' These will be automatically split into time windows, using the `year_split` setting (defaulting to "06-01" in all 'seatrack_settings_list').
@@ -16,25 +17,30 @@
 #' @param show_filter_plots A logical indicating whether to show individual filter plots for the default sun angle. Defaults to `FALSE`.
 #' @param export_calibration_template When `TRUE` will export a calibration template in excel format. Otherwise returns the calibration template as an R object. Defaults to `TRUE`.
 #' @param filter_setting_list A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using [seatrackRgls::read_filter_file()]. Defaults to 'seatrackRgls::seatrack_settings_list'.
+#' @param overwrite_calibration A logical indicating whether to overwrite existing calibration output. Defaults to `FALSE`. If `FALSE`, if a calibration output directory already exists, the function will skip processing and return.
 #' @concept processing_wrapper
 #' @export
 prepare_calibration <- function(
-    import_directory,
+    import_directory = NULL,
+    light_data_list = NULL,
     metadata,
     all_colony_info,
     output_directory,
     show_filter_plots = FALSE,
     export_calibration_template = TRUE,
-    filter_setting_list = seatrackRgls::seatrack_settings_list) {
+    filter_setting_list = seatrackRgls::seatrack_settings_list,
+    overwrite_calibration = FALSE) {
     calibration_template <- process_folder(
         import_directory = import_directory,
+        light_data_list = light_data_list,
         calibration_data = metadata,
         all_colony_info = all_colony_info,
         output_dir = output_directory,
         show_filter_plots = show_filter_plots,
         calibration_mode = TRUE,
         export_calibration_template = export_calibration_template,
-        filter_setting_list = filter_setting_list
+        filter_setting_list = filter_setting_list,
+        overwrite_calibration = overwrite_calibration
     )
     if (!export_calibration_template) {
         # If not exporting, return the calibration template to R.
@@ -50,26 +56,31 @@ prepare_calibration <- function(
 #' Will export a folder containing (for each logger), processed positions, twilight estimates, plots showing the effects of filters, a folder of summary files detailing the results of filters used and maps.
 #'
 #' @param import_directory Directory containing raw light data files. These are expected to be named in the format `<logger_id>_<year_retrieved>_<logger_model>`, e.g. `C23_2015_mk4083`
+#' @param light_data_list A named list of data frames containing light data for each logger/year combination. List names are assumed to be logger serial numbers. If not provided, light data will be loaded from the import directory based on the logger ID and year.
 #' @param calibration_data Data frame containing calibration data for loggers or a path pointing to the calibration data, as created by prepare_calibration().
 #' @param all_colony_info A data frame containing colony information for all loggers (one row per colony). The required columns are `colony`, `latitude`, and `longitude`.
 #' @param output_directory Directory to save processed position outputs, plots etc.
 #' @param extra_metadata Optional data frame containing extra metadata for loggers. This must have the column `logger_id` to join extra metadata. A `year_retrieved` column can also be provided to join based on a combination of logger and which session this is.
 #' @param filter_setting_list A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using 'read_filter_file()'. Defaults to 'seatrack_settings_list'.
+#' @param show_filter_plots A logical indicating whether to show individual filter plots for the default sun angle. Defaults to `TRUE`.
 #' @concept processing_wrapper
 #' @export
 process_positions <- function(
-    import_directory,
+    import_directory = NULL,
+    light_data_list = NULL,
     calibration_data,
     all_colony_info,
     output_directory,
     extra_metadata = NULL,
-    filter_setting_list = seatrackRgls::seatrack_settings_list) {
+    filter_setting_list = seatrackRgls::seatrack_settings_list,
+    show_filter_plots = TRUE) {
     result <- process_folder(
         import_directory = import_directory,
+        light_data_list = light_data_list,
         calibration_data = calibration_data,
         all_colony_info = all_colony_info,
         output_dir = output_directory,
-        show_filter_plots = TRUE,
+        show_filter_plots = show_filter_plots,
         calibration_mode = FALSE,
         extra_metadata = extra_metadata,
         filter_setting_list = filter_setting_list

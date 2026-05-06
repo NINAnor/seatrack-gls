@@ -5,15 +5,17 @@
 \title{Process all light position files in a folder}
 \usage{
 process_folder(
-  import_directory,
+  import_directory = NULL,
   calibration_data,
   all_colony_info,
+  light_data_list = NULL,
   filter_setting_list = seatrackRgls::seatrack_settings_list,
   extra_metadata = NULL,
   show_filter_plots = FALSE,
   output_dir = NULL,
   calibration_mode = TRUE,
-  export_calibration_template = TRUE
+  export_calibration_template = TRUE,
+  overwrite_calibration = FALSE
 )
 }
 \arguments{
@@ -25,6 +27,8 @@ In calibration mode, the minimum required columns are \code{logger_id}, \code{sp
 If not in calibration mode, the data frame is expected to be in the format output by running this function in calibration mode.}
 
 \item{all_colony_info}{A data frame containing colony information for all loggers (one row per colony). The required columns are \code{colony}, \code{latitude}, and \code{longitude}.}
+
+\item{light_data_list}{A named list of data frames containing light data for each logger/year combination. List names are assumed to be logger serial numbers. If not provided, light data will be loaded from the import directory based on the logger ID and year.}
 
 \item{filter_setting_list}{A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using 'read_filter_file()'. Defaults to 'seatrack_settings_list'.}
 
@@ -40,6 +44,8 @@ If \code{FALSE}, the function exports processed position data, filtering summari
 each logger/year combination.}
 
 \item{export_calibration_template}{A logical indicating whether to export an excel calibration template. Defaults to \code{TRUE}. If \code{FALSE}, the calibration template is returned.}
+
+\item{overwrite_calibration}{A logical indicating whether to overwrite existing calibration output. Defaults to \code{FALSE}. If \code{FALSE}, if a calibration output directory already exists, the function will skip processing and return.}
 }
 \description{
 Given an import directory containing light data files this function processes all light data files in the folder.

@@ -11,6 +11,7 @@
 #' In calibration mode, the minimum required columns are `logger_id`, `species`, `colony`, `date_deployed` and `date_retrieved`. Providing `logger_model` is strongly advised.
 #' If not in calibration mode, the data frame is expected to be in the format output by running this function in calibration mode.
 #' @param all_colony_info A data frame containing colony information for all loggers (one row per colony). The required columns are `colony`, `latitude`, and `longitude`.
+#' @param logger_light_data An optional data frame containing all light data for the logger. If not provided, light data will be loaded from the import directory based on the logger ID and year.
 #' @param filter_setting_list A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using 'read_filter_file()'. Defaults to 'seatrack_settings_list'.
 #' @param extra_metadata Optional data frame containing extra metadata for loggers. This must have the column `logger_id` to join extra metadata. A `year_retrieved` column can also be provided to join based on a combination of logger and which session this is.
 #' @param export_maps A logical indicating whether to export maps of the processed positions. Defaults to `TRUE`.
@@ -31,6 +32,7 @@ process_logger_year <- function(
     import_directory,
     calibration_data,
     all_colony_info,
+    logger_light_data = NULL,
     filter_setting_list = seatrackRgls::seatrack_settings_list,
     extra_metadata = NULL,
     show_filter_plots = FALSE,
@@ -40,12 +42,20 @@ process_logger_year <- function(
     calibration_mode = TRUE,
     analyzer = "") {
     print(paste("Processing logger", logger_id, "for retrieval year", year))
-    file_info <- scan_import_dir(import_directory)
-    file_info <- file_info[file_info$logger_id == logger_id & file_info$year_downloaded == year, ]
-
-    if (nrow(file_info) == 0) {
-        stop("No files found for this logger/year combination.")
+    if(!is.null(logger_light_data)){
+        file_info <- data.frame(
+            logger_id = logger_id,
+            year_downloaded = format(max(logger_light_data$date), "%Y")
+        )
+    }else{
+        file_info <- scan_import_dir(import_directory)
+        file_info <- file_info[file_info$logger_id == logger_id & file_info$year_downloaded == year, ]
+            if (nrow(file_info) == 0) {
+                stop("No light this logger/year combination.")
+        }
     }
+
+
 
     if (is.character(calibration_data)) {
         calibration_data <- read_cal_files(calibration_data)
@@ -151,6 +161,7 @@ process_logger_year <- function(
 
     result <- process_logger_light_data(
         filepaths = filepaths,
+        all_light_data = logger_light_data,
         logger_calibration_data = logger_calibration_data,
         filter_setting_list = filter_setting_list, # continue passing filter_setting_list so we can try and get a per year filter
         logger_colony_info = logger_colony_info,

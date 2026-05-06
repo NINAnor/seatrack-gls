@@ -55,7 +55,7 @@ get_boundary_box <- function(light_data_calibration, logger_filter) {
 
 scan_import_dir <- function(import_directory) {
     print("Scan import directory for files...")
-    all_files <- list.files(import_directory, pattern = "*.lux|*.lig", recursive = TRUE, full.names = TRUE)
+    all_files <- list.files(import_directory, pattern = "*.lux|*.lig|*.csv", recursive = TRUE, full.names = TRUE)
     if (length(all_files) == 0) {
         return(data.frame())
     }

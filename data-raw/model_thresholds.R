@@ -16,7 +16,7 @@ summer_thresholds <- list(
             "c331",
             "c108",
             "LAT",
-            "LAT2800S"
+            "LAT2800S",
         ),
         value = 300
     ),
@@ -44,7 +44,13 @@ main_thresholds <- list(
         models = c(
             "mk3006",
             "mk3005",
-            "mk15", "mk3", "mk4", "mk5", "mk7", "mk13", "mk14"
+            "mk15",
+            "mk3",
+            "mk4",
+            "mk5",
+            "mk7",
+            "mk13",
+            "mk14",
         ),
         value = 9
     ),

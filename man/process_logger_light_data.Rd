@@ -9,6 +9,7 @@ process_logger_light_data(
   logger_calibration_data,
   filter_setting_list,
   logger_colony_info,
+  all_light_data = NULL,
   logger_extra_metadata = NULL,
   show_filter_plots = FALSE,
   plotting_dir = NULL,
@@ -24,6 +25,8 @@ process_logger_light_data(
 \item{filter_setting_list}{A list of filter settings for different species. Defaults to \code{seatrack_settings_list}.}
 
 \item{logger_colony_info}{A data frame containing colony information for the logger.}
+
+\item{all_light_data}{An optional data frame containing all light data for the logger. If not provided, light data will be loaded from the filepaths.}
 
 \item{logger_extra_metadata}{A data frame containing extra metadata for the logger.}
 

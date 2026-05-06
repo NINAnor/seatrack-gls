@@ -20,8 +20,8 @@ plot_a_map <- function(df) {
    lonmax <- max(df$lon) + 10
    lonmin <- min(df$lon) - 10
 
-   latmax <- max(df$lat[df$eqfilter == 1]) + 10
-   latmin <- min(df$lat[df$eqfilter == 1]) - 10
+   latmax <- min(c(max(df$lat[df$eqfilter == 1]) + 10, 90))
+   latmin <- max(c(min(df$lat[df$eqfilter == 1]) - 10, -90))
 
    plot(NA,
       xlim = c(lonmin, lonmax), ylim = c(latmin, latmax), xaxt = "n", yaxt = "n", xlab = "",

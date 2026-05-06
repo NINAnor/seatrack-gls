@@ -10,6 +10,7 @@ process_logger_year(
   import_directory,
   calibration_data,
   all_colony_info,
+  logger_light_data = NULL,
   filter_setting_list = seatrackRgls::seatrack_settings_list,
   extra_metadata = NULL,
   show_filter_plots = FALSE,
@@ -33,6 +34,8 @@ In calibration mode, the minimum required columns are \code{logger_id}, \code{sp
 If not in calibration mode, the data frame is expected to be in the format output by running this function in calibration mode.}
 
 \item{all_colony_info}{A data frame containing colony information for all loggers (one row per colony). The required columns are \code{colony}, \code{latitude}, and \code{longitude}.}
+
+\item{logger_light_data}{An optional data frame containing all light data for the logger. If not provided, light data will be loaded from the import directory based on the logger ID and year.}
 
 \item{filter_setting_list}{A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using 'read_filter_file()'. Defaults to 'seatrack_settings_list'.}
 

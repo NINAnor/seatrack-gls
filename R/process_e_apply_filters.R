@@ -39,19 +39,19 @@ apply_filters <- function(
 
     # Fill in default if neccesary
     if (type == "main") {
-        light_data_calibration$sun_angle_start[is.na(light_data_calibration$sun_angle_start)] <- -3.5
+        light_data_calibration$sun_angle_start[is.na(light_data_calibration$sun_angle_start)] <- get_default_sun_angle(type, light_data_calibration$logger_model)
         light_data_calibration$sun_angle_end[is.na(light_data_calibration$sun_angle_end)] <- light_data_calibration$sun_angle_start[is.na(light_data_calibration$sun_angle_end)]
         light_data_calibration$light_threshold[is.na(light_data_calibration$light_threshold)] <- get_threshold(light_data_calibration$logger_model, type)
     } else if (type == "winter") {
         if (calibration_mode) {
-            light_data_calibration$sun_angle_start <- -5
-            light_data_calibration$sun_angle_end <- -5
+            light_data_calibration$sun_angle_start <- get_default_sun_angle(type, light_data_calibration$logger_model)
+            light_data_calibration$sun_angle_end <- light_data_calibration$sun_angle_start
         }
         light_data_calibration$light_threshold <- min(light_data$lux) + 0.1
     } else if (type == "summer") {
         if (calibration_mode) {
-            light_data_calibration$sun_angle_start <- 0
-            light_data_calibration$sun_angle_end <- 0
+            light_data_calibration$sun_angle_start <- get_default_sun_angle(type, light_data_calibration$logger_model)
+            light_data_calibration$sun_angle_end <- light_data_calibration$sun_angle_start
         }
         light_data_calibration$light_threshold <- get_threshold(light_data_calibration$logger_model, type)
     }
@@ -71,7 +71,6 @@ apply_filters <- function(
     )
 
     logger_id_year <- paste0(light_data_calibration$logger_id, "_", light_data_calibration$year_tracked)
-
     # Estimate twilights
     print("Estimating twilights...")
     twilight_data <-
@@ -195,11 +194,11 @@ apply_filters <- function(
     filtering$twilight_mismatch <- nrow(postab) - nrow(posdata)
     print("Applied double smoothing to positions.")
     # Equinox-filter ---------------------
-    # CHANGE BEHAVIOUR FOR WINTER/SUMMER MODE ALWAYS TRUE OR FALSE
+
     if (type == "main") {
         posdata <- equinox_filter(posdata, posdata$lat_smooth2, light_data_calibration, logger_colony_info)
     } else {
-        posdata$eqfilter <- TRUE
+        posdata$eqfilter <- lubridate::yday(posdata$date_time) %in% c(52:106, 239:293)
     }
     print(paste(sum(!posdata$eqfilter, na.rm = TRUE), "positions marked as during equinox periods."))
     print("Applied equinox filter to positions.")
@@ -253,11 +252,12 @@ apply_filters <- function(
     filter_df$colony <- NULL
     filter_df$logger_id <- NULL
     filter_df$years_tracked <- NULL
+    filter_df$speed_filter <- filter_df$speed
 
     posdata_export <- data.frame(posdata_ds, light_data_calibration, logger_colony_info, filter_df)
     posdata_export$sun_angle <- get_sun_angle_seq(posdata_export, light_data_calibration)
     posdata_export$logger_id_year <- paste(posdata_export$logger_id[1], strsplit(posdata_export$total_years_tracked[1], "_")[[1]][2], sep = "_")
-    posdata_export$script_version <- 3.0
+    posdata_export$script_version <- 3.01
     posdata_export <- dplyr::select(
         posdata_export,
         logger_id,
@@ -288,7 +288,7 @@ apply_filters <- function(
         light_threshold,
         noon_filter,
         daylength_filter,
-        speed,
+        speed_filter,
         coast_to_land,
         coast_to_sea,
         loess_filter_k,
@@ -351,6 +351,8 @@ apply_filters <- function(
                 }
             )
 
+
+
             posdata_export_ws_af <- seasonal_calibration_result$posdata_export
             filtering <- seasonal_calibration_result$filtering
 
@@ -380,14 +382,14 @@ apply_filters <- function(
     } else {
         if (type != "main") {
             print("Comparing sun angles to main calibration...")
-            new_sun_angles <- compare_sun_angle(prev_posdata_export, posdata_export, type)
+            new_sun_angles <- compare_sun_angle(prev_posdata_export, posdata_export, type, light_data_calibration$logger_model)
             light_data_calibration$sun_angle_start <- new_sun_angles$sun_angle_start
             light_data_calibration$sun_angle_end <- new_sun_angles$sun_angle_end
         } else {
             print("Exporting calibration plots...")
             make_calibration_plots(
                 posdata_export,
-                sun_angle_seq = seatrackRgls::sun_angles$general,
+                sun_angle_seq = get_sun_angle("general", light_data_calibration$logger_model),
                 light_data_calibration = light_data_calibration,
                 logger_filter = logger_filter,
                 logger_id_year = logger_id_year,
@@ -475,7 +477,6 @@ handle_seasonal_calibration <- function(
     print(paste("Removed", filtering$removed_speed_seasonal, "positions during speed filtering of combined seasonal positions."))
 
     # Keep this dataframe clean
-    posdata_export_ws_sf$speed <- NULL
     posdata_export_ws_sf$keep <- NULL
 
     # Run argos filter again

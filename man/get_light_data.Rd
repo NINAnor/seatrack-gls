@@ -4,7 +4,7 @@
 \alias{get_light_data}
 \title{Load lightdata from files}
 \usage{
-get_light_data(filepaths)
+get_light_data(filepaths, ...)
 }
 \arguments{
 \item{filepaths}{A vector of file paths to logger data files.}
