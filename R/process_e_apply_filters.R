@@ -198,7 +198,7 @@ apply_filters <- function(
     if (type == "main") {
         posdata <- equinox_filter(posdata, posdata$lat_smooth2, light_data_calibration, logger_colony_info)
     } else {
-        posdata$eqfilter <- lubridate::yday(posdata$date_time) %in% c(52:106, 239:293)
+        posdata$eqfilter <- !lubridate::yday(posdata$date_time) %in% c(52:106, 239:293)
     }
     print(paste(sum(!posdata$eqfilter, na.rm = TRUE), "positions marked as during equinox periods."))
     print("Applied equinox filter to positions.")
