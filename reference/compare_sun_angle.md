@@ -6,7 +6,7 @@ exports to optimize position estimation based on latitude differences.
 ## Usage
 
 ``` r
-compare_sun_angle(prev_posdata_export, new_posdata_export, type)
+compare_sun_angle(prev_posdata_export, new_posdata_export, type, model = "")
 ```
 
 ## Arguments
@@ -25,6 +25,12 @@ compare_sun_angle(prev_posdata_export, new_posdata_export, type)
 
   A string indicating the type of sun angle sequence to use. Options are
   `"general"`, `"summer"`, or `"winter"`.
+
+- model:
+
+  A string indicating the logger model. If the model is "LAT" or
+  "LAT2800S", it retrieves the sun angles specific to those models.
+  Default is an empty string.
 
 ## Value
 

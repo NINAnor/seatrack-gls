@@ -82,11 +82,15 @@ Data used in this package
 
 - [`equinox_table`](https://ninanor.github.io/seatrackRgls/reference/equinox_table.md)
   : Equinox table
+- [`example_colony_info`](https://ninanor.github.io/seatrackRgls/reference/example_colony_info.md)
+  : Example colony information for GLS loggers A dataset containing
+  example example colony information for GLS loggers.
 - [`example_metadata`](https://ninanor.github.io/seatrackRgls/reference/example_data.md)
-  [`example_colony_info`](https://ninanor.github.io/seatrackRgls/reference/example_data.md)
-  [`example_extra_metadata`](https://ninanor.github.io/seatrackRgls/reference/example_data.md)
   : Example metadata for GLS loggers A dataset containing example
   metadata for GLS loggers.
+- [`example_extra_metadata`](https://ninanor.github.io/seatrackRgls/reference/example_extra_metadata.md)
+  : Example extra metadata for GLS loggers A dataset containing example
+  extra metadata for GLS loggers.
 - [`logger_light_thresholds`](https://ninanor.github.io/seatrackRgls/reference/logger_light_thresholds.md)
   : Per logger threshold settings List of different light thresholds
   depending on model

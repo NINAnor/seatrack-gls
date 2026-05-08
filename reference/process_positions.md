@@ -10,12 +10,14 @@ filter settings template see 'create_filter_settings_file()'
 
 ``` r
 process_positions(
-  import_directory,
+  import_directory = NULL,
+  light_data_list = NULL,
   calibration_data,
   all_colony_info,
   output_directory,
   extra_metadata = NULL,
-  filter_setting_list = seatrackRgls::seatrack_settings_list
+  filter_setting_list = seatrackRgls::seatrack_settings_list,
+  show_filter_plots = TRUE
 )
 ```
 
@@ -26,6 +28,13 @@ process_positions(
   Directory containing raw light data files. These are expected to be
   named in the format `<logger_id>_<year_retrieved>_<logger_model>`,
   e.g. `C23_2015_mk4083`
+
+- light_data_list:
+
+  A named list of data frames containing light data for each logger/year
+  combination. List names are assumed to be logger serial numbers. If
+  not provided, light data will be loaded from the import directory
+  based on the logger ID and year.
 
 - calibration_data:
 
@@ -54,6 +63,11 @@ process_positions(
   A 'GLSFilterSettingsList' object containing filter settings for
   loggers or a path to load one using 'read_filter_file()'. Defaults to
   'seatrack_settings_list'.
+
+- show_filter_plots:
+
+  A logical indicating whether to show individual filter plots for the
+  default sun angle. Defaults to `TRUE`.
 
 ## Details
 

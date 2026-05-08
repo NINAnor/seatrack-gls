@@ -11,7 +11,7 @@ If export_calibration_template is TRUE, it will export an empty calibration shee
 
     <a class="navbar-brand me-2" href="../index.html">seatrackRgls</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.42</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.55</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,13 +48,15 @@ If <code>export_calibration_template</code> is <code>TRUE</code>, it will export
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prepare_calibration</span><span class="op">(</span></span>
-<span>  <span class="va">import_directory</span>,</span>
+<span>  import_directory <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  light_data_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">metadata</span>,</span>
 <span>  <span class="va">all_colony_info</span>,</span>
 <span>  <span class="va">output_directory</span>,</span>
 <span>  show_filter_plots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  export_calibration_template <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  filter_setting_list <span class="op">=</span> <span class="fu">seatrackRgls</span><span class="fu">::</span><span class="va"><a href="seatrack_settings_list.html">seatrack_settings_list</a></span></span>
+<span>  filter_setting_list <span class="op">=</span> <span class="fu">seatrackRgls</span><span class="fu">::</span><span class="va"><a href="seatrack_settings_list.html">seatrack_settings_list</a></span>,</span>
+<span>  overwrite_calibration <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -64,6 +66,10 @@ If <code>export_calibration_template</code> is <code>TRUE</code>, it will export
 
 <dl><dt id="arg-import-directory">import_directory<a class="anchor" aria-label="anchor" href="#arg-import-directory"></a></dt>
 <dd><p>Directory containing raw light data files. These are expected to be named in the format <code>&lt;logger_id&gt;_&lt;year_retrieved&gt;_&lt;logger_model&gt;</code>, e.g. <code>C23_2015_mk4083</code></p></dd>
+
+
+<dt id="arg-light-data-list">light_data_list<a class="anchor" aria-label="anchor" href="#arg-light-data-list"></a></dt>
+<dd><p>A named list of data frames containing light data for each logger/year combination. List names are assumed to be logger serial numbers. If not provided, light data will be loaded from the import directory based on the logger ID and year.</p></dd>
 
 
 <dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
@@ -91,6 +97,10 @@ Alternatively, custom time windows can be provided by including columns <code>st
 
 <dt id="arg-filter-setting-list">filter_setting_list<a class="anchor" aria-label="anchor" href="#arg-filter-setting-list"></a></dt>
 <dd><p>A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using <code><a href="read_filter_file.html">read_filter_file()</a></code>. Defaults to 'seatrackRgls::seatrack_settings_list'.</p></dd>
+
+
+<dt id="arg-overwrite-calibration">overwrite_calibration<a class="anchor" aria-label="anchor" href="#arg-overwrite-calibration"></a></dt>
+<dd><p>A logical indicating whether to overwrite existing calibration output. Defaults to <code>FALSE</code>. If <code>FALSE</code>, if a calibration output directory already exists, the function will skip processing and return.</p></dd>
 
 </dl></div>
     <div class="section level2">

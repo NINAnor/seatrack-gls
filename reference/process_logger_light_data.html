@@ -9,7 +9,7 @@ this function processes the light data to estimate positions and apply various f
 
     <a class="navbar-brand me-2" href="../index.html">seatrackRgls</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.42</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.55</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,7 @@ this function processes the light data to estimate positions and apply various f
 <span>  <span class="va">logger_calibration_data</span>,</span>
 <span>  <span class="va">filter_setting_list</span>,</span>
 <span>  <span class="va">logger_colony_info</span>,</span>
+<span>  all_light_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  logger_extra_metadata <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_filter_plots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plotting_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -75,6 +76,10 @@ this function processes the light data to estimate positions and apply various f
 
 <dt id="arg-logger-colony-info">logger_colony_info<a class="anchor" aria-label="anchor" href="#arg-logger-colony-info"></a></dt>
 <dd><p>A data frame containing colony information for the logger.</p></dd>
+
+
+<dt id="arg-all-light-data">all_light_data<a class="anchor" aria-label="anchor" href="#arg-all-light-data"></a></dt>
+<dd><p>An optional data frame containing all light data for the logger. If not provided, light data will be loaded from the filepaths.</p></dd>
 
 
 <dt id="arg-logger-extra-metadata">logger_extra_metadata<a class="anchor" aria-label="anchor" href="#arg-logger-extra-metadata"></a></dt>

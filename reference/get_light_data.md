@@ -6,7 +6,7 @@ formats based on file extensions.
 ## Usage
 
 ``` r
-get_light_data(filepaths)
+get_light_data(filepaths, ...)
 ```
 
 ## Arguments

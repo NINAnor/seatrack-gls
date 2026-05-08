@@ -13,15 +13,17 @@ twilight estimates for each logger/year combination.
 
 ``` r
 process_folder(
-  import_directory,
+  import_directory = NULL,
   calibration_data,
   all_colony_info,
+  light_data_list = NULL,
   filter_setting_list = seatrackRgls::seatrack_settings_list,
   extra_metadata = NULL,
   show_filter_plots = FALSE,
   output_dir = NULL,
   calibration_mode = TRUE,
-  export_calibration_template = TRUE
+  export_calibration_template = TRUE,
+  overwrite_calibration = FALSE
 )
 ```
 
@@ -50,6 +52,13 @@ process_folder(
   A data frame containing colony information for all loggers (one row
   per colony). The required columns are `colony`, `latitude`, and
   `longitude`.
+
+- light_data_list:
+
+  A named list of data frames containing light data for each logger/year
+  combination. List names are assumed to be logger serial numbers. If
+  not provided, light data will be loaded from the import directory
+  based on the logger ID and year.
 
 - filter_setting_list:
 
@@ -86,3 +95,9 @@ process_folder(
 
   A logical indicating whether to export an excel calibration template.
   Defaults to `TRUE`. If `FALSE`, the calibration template is returned.
+
+- overwrite_calibration:
+
+  A logical indicating whether to overwrite existing calibration output.
+  Defaults to `FALSE`. If `FALSE`, if a calibration output directory
+  already exists, the function will skip processing and return.

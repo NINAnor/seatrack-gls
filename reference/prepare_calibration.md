@@ -15,13 +15,15 @@ calibration sheet using 'calibration_to_wb()'.
 
 ``` r
 prepare_calibration(
-  import_directory,
+  import_directory = NULL,
+  light_data_list = NULL,
   metadata,
   all_colony_info,
   output_directory,
   show_filter_plots = FALSE,
   export_calibration_template = TRUE,
-  filter_setting_list = seatrackRgls::seatrack_settings_list
+  filter_setting_list = seatrackRgls::seatrack_settings_list,
+  overwrite_calibration = FALSE
 )
 ```
 
@@ -32,6 +34,13 @@ prepare_calibration(
   Directory containing raw light data files. These are expected to be
   named in the format `<logger_id>_<year_retrieved>_<logger_model>`,
   e.g. `C23_2015_mk4083`
+
+- light_data_list:
+
+  A named list of data frames containing light data for each logger/year
+  combination. List names are assumed to be logger serial numbers. If
+  not provided, light data will be loaded from the import directory
+  based on the logger ID and year.
 
 - metadata:
 
@@ -75,6 +84,12 @@ prepare_calibration(
   loggers or a path to load one using
   [`read_filter_file()`](https://ninanor.github.io/seatrackRgls/reference/read_filter_file.md).
   Defaults to 'seatrackRgls::seatrack_settings_list'.
+
+- overwrite_calibration:
+
+  A logical indicating whether to overwrite existing calibration output.
+  Defaults to `FALSE`. If `FALSE`, if a calibration output directory
+  already exists, the function will skip processing and return.
 
 ## Details
 

@@ -16,6 +16,7 @@ process_logger_year(
   import_directory,
   calibration_data,
   all_colony_info,
+  logger_light_data = NULL,
   filter_setting_list = seatrackRgls::seatrack_settings_list,
   extra_metadata = NULL,
   show_filter_plots = FALSE,
@@ -60,6 +61,12 @@ process_logger_year(
   A data frame containing colony information for all loggers (one row
   per colony). The required columns are `colony`, `latitude`, and
   `longitude`.
+
+- logger_light_data:
+
+  An optional data frame containing all light data for the logger. If
+  not provided, light data will be loaded from the import directory
+  based on the logger ID and year.
 
 - filter_setting_list:
 

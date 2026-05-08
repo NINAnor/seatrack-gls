@@ -9,7 +9,7 @@ applying calibration data, filter settings, colony info, and extra metadata as n
 
     <a class="navbar-brand me-2" href="../index.html">seatrackRgls</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.42</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.55</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,7 @@ applying calibration data, filter settings, colony info, and extra metadata as n
 <span>  <span class="va">import_directory</span>,</span>
 <span>  <span class="va">calibration_data</span>,</span>
 <span>  <span class="va">all_colony_info</span>,</span>
+<span>  logger_light_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filter_setting_list <span class="op">=</span> <span class="fu">seatrackRgls</span><span class="fu">::</span><span class="va"><a href="seatrack_settings_list.html">seatrack_settings_list</a></span>,</span>
 <span>  extra_metadata <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_filter_plots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -86,6 +87,10 @@ If not in calibration mode, the data frame is expected to be in the format outpu
 
 <dt id="arg-all-colony-info">all_colony_info<a class="anchor" aria-label="anchor" href="#arg-all-colony-info"></a></dt>
 <dd><p>A data frame containing colony information for all loggers (one row per colony). The required columns are <code>colony</code>, <code>latitude</code>, and <code>longitude</code>.</p></dd>
+
+
+<dt id="arg-logger-light-data">logger_light_data<a class="anchor" aria-label="anchor" href="#arg-logger-light-data"></a></dt>
+<dd><p>An optional data frame containing all light data for the logger. If not provided, light data will be loaded from the import directory based on the logger ID and year.</p></dd>
 
 
 <dt id="arg-filter-setting-list">filter_setting_list<a class="anchor" aria-label="anchor" href="#arg-filter-setting-list"></a></dt>
