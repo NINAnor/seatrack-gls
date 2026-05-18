@@ -174,13 +174,13 @@ head(positions)
 #> 4                88 Kate Kittiwake     2017-06-11        Biotrack     6211704
 #> 5                88 Kate Kittiwake     2017-06-11        Biotrack     6211704
 #> 6                88 Kate Kittiwake     2017-06-11        Biotrack     6211704
-#>   country_code        raw_data_file
-#> 1          NOS C411_2017_mk4083.lig
-#> 2          NOS C411_2017_mk4083.lig
-#> 3          NOS C411_2017_mk4083.lig
-#> 4          NOS C411_2017_mk4083.lig
-#> 5          NOS C411_2017_mk4083.lig
-#> 6          NOS C411_2017_mk4083.lig
+#>   country_code point_type        raw_data_file
+#> 1          NOS       main C411_2017_mk4083.lig
+#> 2          NOS       main C411_2017_mk4083.lig
+#> 3          NOS       main C411_2017_mk4083.lig
+#> 4          NOS       main C411_2017_mk4083.lig
+#> 5          NOS       main C411_2017_mk4083.lig
+#> 6          NOS       main C411_2017_mk4083.lig
 ```
 
 Note our extra metadata appended to the end.
