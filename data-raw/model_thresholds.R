@@ -20,6 +20,20 @@ summer_thresholds <- list(
         ),
         value = 300
     ),
+    threshold_50 = list(
+        models = c(
+            "mk3006",
+            "mk3005",
+            "mk15",
+            "mk3",
+            "mk4",
+            "mk5",
+            "mk7",
+            "mk13",
+            "mk14",
+        ),
+        value = 50
+    ),
     default = list(models = c(), value = 50)
 )
 

@@ -37,8 +37,9 @@ plot_a_map <- function(df) {
    points(df$lon[df$eqfilter == 1 & month(df$date_time) %in% c(8, 9, 10)], df$lat[df$eqfilter == 1 & month(df$date_time) %in% c(8, 9, 10)], cex = 0.6, pch = 16, col = "steelblue")
    points(df$lon[df$eqfilter == 1 & month(df$date_time) %in% c(11, 12, 1)], df$lat[df$eqfilter == 1 & month(df$date_time) %in% c(11, 12, 1)], cex = 0.6, pch = 16, col = "firebrick")
    points(df$lon[df$eqfilter == 1 & month(df$date_time) %in% c(2, 3, 4)], df$lat[df$eqfilter == 1 & month(df$date_time) %in% c(2, 3, 4)], cex = 0.6, pch = 16, col = "orange")
-   points(df$lon[df$eqfilter == 1 & df$light_threshold >= 20], df$lat[df$eqfilter == 1 & df$light_threshold >= 20], cex = 0.6, pch = 21, bg = "white", col = "black")
-   points(df$lon[df$eqfilter == 1 & df$light_threshold < median(df$light_threshold)], df$lat[df$eqfilter == 1 & df$light_threshold < median(df$light_threshold)], cex = 0.6, pch = 21, col = "violet")
+
+   points(df$lon[df$eqfilter == 1 & df$point_type == "summer"], df$lat[df$eqfilter == 1 & df$point_type == "summer"], cex = 0.6, pch = 21, col = "black")
+   points(df$lon[df$eqfilter == 1 & df$point_type == "winter"], df$lat[df$eqfilter == 1 & df$point_type == "winter"], cex = 0.6, pch = 21, col = "violet")
 
    points(df$lon[df$eqfilter == 0], df$lat[df$eqfilter == 0], cex = 0.3, pch = 16, col = "black")
    points(df$col_lon[1], df$col_lat[1], cex = 2, pch = 19, col = "red")

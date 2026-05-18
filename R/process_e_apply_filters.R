@@ -329,7 +329,9 @@ apply_filters <- function(
     }
 
     if (!calibration_mode) {
+
         if (type == "main") {
+            posdata_export$point_type <- "main"
             seasonal_calibration_result <- tryCatch(
                 {
                     handle_seasonal_calibration(
@@ -345,6 +347,7 @@ apply_filters <- function(
                 error = function(e) {
                     print(paste("Error during seasonal calibration:", e$message))
                     print("Proceeding without seasonal adjustments.")
+
                     return(list(
                         posdata_export = posdata_export,
                         filtering = filtering
@@ -456,14 +459,18 @@ handle_seasonal_calibration <- function(
     #     winter_days <- c(285:366, 1:60, 110:247)
     # }
     # add_to_summer <- summer_pos[lubridate::yday(summer_pos$date_time) %in% summer_days, ]
+    summer_pos$point_type <- "summer"
     add_to_summer <- summer_pos[!(as.Date(summer_pos$date_time) %in% as.Date(posdata_export$date_time)), ]
+
 
     posdata_export_w_s <- rbind(posdata_export, add_to_summer)
     print(paste("Added", nrow(add_to_summer), "positions from summer seasonal calibration."))
     filtering$added_summer_positions <- nrow(add_to_summer)
 
     # add_to_winter <- winter_pos[lubridate::yday(winter_pos$date_time) %in% winter_days, ]
+    winter_pos$point_type <- "winter"
     add_to_winter <- winter_pos[!(as.Date(winter_pos$date_time) %in% as.Date(posdata_export_w_s$date_time)), ]
+
     posdata_export_w_s <- rbind(posdata_export_w_s, add_to_winter)
     print(paste("Added", nrow(add_to_winter), "positions from winter seasonal calibration."))
     filtering$added_winter_positions <- nrow(add_to_winter)
