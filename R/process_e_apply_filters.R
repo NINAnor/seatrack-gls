@@ -198,6 +198,7 @@ apply_filters <- function(
     if (type == "main") {
         posdata <- equinox_filter(posdata, posdata$lat_smooth2, light_data_calibration, logger_colony_info)
     } else {
+        # Eq filter based on set dates.
         posdata$eqfilter <- !lubridate::yday(posdata$date_time) %in% c(52:106, 239:293)
     }
     print(paste(sum(!posdata$eqfilter, na.rm = TRUE), "positions marked as during equinox periods."))
@@ -457,9 +458,15 @@ handle_seasonal_calibration <- function(
     # add_to_summer <- summer_pos[lubridate::yday(summer_pos$date_time) %in% summer_days, ]
     add_to_summer <- summer_pos[!(as.Date(summer_pos$date_time) %in% as.Date(posdata_export$date_time)), ]
 
+    posdata_export_w_s <- rbind(posdata_export, add_to_summer)
+    print(paste("Added", nrow(add_to_summer), "positions from summer seasonal calibration."))
+    filtering$added_summer_positions <- nrow(add_to_summer)
+
     # add_to_winter <- winter_pos[lubridate::yday(winter_pos$date_time) %in% winter_days, ]
-    add_to_winter <- winter_pos[!(as.Date(winter_pos$date_time) %in% as.Date(posdata_export$date_time)), ]
-    posdata_export_w_s <- rbind(posdata_export, add_to_summer, add_to_winter)
+    add_to_winter <- winter_pos[!(as.Date(winter_pos$date_time) %in% as.Date(posdata_export_w_s$date_time)), ]
+    posdata_export_w_s <- rbind(posdata_export_w_s, add_to_winter)
+    print(paste("Added", nrow(add_to_winter), "positions from winter seasonal calibration."))
+    filtering$added_winter_positions <- nrow(add_to_winter)
 
     posdata_export_w_s <- posdata_export_w_s[order(posdata_export_w_s$date_time), ]
     filtering$added_seasonal_positions <- nrow(posdata_export_w_s) - nrow(posdata_export)
