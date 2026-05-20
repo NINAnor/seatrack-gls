@@ -13,6 +13,7 @@
 #' @param plotting_dir An optional directory path to save plotting outputs. Defaults to NULL.
 #' @param calibration_mode A logical indicating whether to run in calibration mode. Defaults to TRUE.
 #' @param min_length Number indicating minimum length of light data. Anything below this will fail. Defaults to 40.
+#' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE.
 #'
 #' @concept processing
 #' @return If calibration_mode is FALSE, returns a list containing:
@@ -30,7 +31,8 @@ process_logger_light_data <- function(
     show_filter_plots = FALSE,
     plotting_dir = NULL,
     calibration_mode = TRUE,
-    min_length = 40) {
+    min_length = 40,
+    stop_on_error = FALSE) {
     # create dir for plotting
     if (!is.null(plotting_dir) && !dir.exists(plotting_dir)) {
         dir.create(plotting_dir, recursive = TRUE)
@@ -76,14 +78,15 @@ process_logger_light_data <- function(
             result <- tryCatch(
                 {
                     process_result <- apply_filters(
-                        light_data,
-                        light_data_calibration,
-                        logger_filter,
-                        logger_colony_info,
-                        logger_extra_metadata,
-                        show_filter_plots,
-                        plotting_dir,
-                        calibration_mode = calibration_mode
+                        light_data = light_data,
+                        light_data_calibration = light_data_calibration,
+                        logger_filter = logger_filter,
+                        logger_colony_info = logger_colony_info,
+                        logger_extra_metadata = logger_extra_metadata,
+                        show_filter_plots = show_filter_plots,
+                        plotting_dir = plotting_dir,
+                        calibration_mode = calibration_mode,
+                        stop_on_error = stop_on_error
                     )
                     if (calibration_mode) {
                         process_result$problem <- FALSE
@@ -92,6 +95,9 @@ process_logger_light_data <- function(
                 },
                 error = function(e) {
                     print(paste("Error in processing:", e))
+                    if (stop_on_error) {
+                        stop(e)
+                    }
                     if (calibration_mode) {
                         process_result <- logger_calibration_data[i, ]
                         process_result <- add_default_cols(process_result)

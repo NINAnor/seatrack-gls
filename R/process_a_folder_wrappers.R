@@ -18,6 +18,7 @@
 #' @param export_calibration_template When `TRUE` will export a calibration template in excel format. Otherwise returns the calibration template as an R object. Defaults to `TRUE`.
 #' @param filter_setting_list A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using [seatrackRgls::read_filter_file()]. Defaults to 'seatrackRgls::seatrack_settings_list'.
 #' @param overwrite_calibration A logical indicating whether to overwrite existing calibration output. Defaults to `FALSE`. If `FALSE`, if a calibration output directory already exists, the function will skip processing and return.
+#' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE. If TRUE, if an error occurs during processing of a logger/year combination, the function will stop and return an error message. If FALSE, the function will continue processing remaining logger/year combinations and will print a message indicating which logger/year combinations had errors.
 #' @concept processing_wrapper
 #' @export
 prepare_calibration <- function(
@@ -29,7 +30,8 @@ prepare_calibration <- function(
     show_filter_plots = FALSE,
     export_calibration_template = TRUE,
     filter_setting_list = seatrackRgls::seatrack_settings_list,
-    overwrite_calibration = FALSE) {
+    overwrite_calibration = FALSE,
+    stop_on_error = FALSE) {
     calibration_template <- process_folder(
         import_directory = import_directory,
         light_data_list = light_data_list,
@@ -40,7 +42,8 @@ prepare_calibration <- function(
         calibration_mode = TRUE,
         export_calibration_template = export_calibration_template,
         filter_setting_list = filter_setting_list,
-        overwrite_calibration = overwrite_calibration
+        overwrite_calibration = overwrite_calibration,
+        stop_on_error = stop_on_error
     )
     if (!export_calibration_template) {
         # If not exporting, return the calibration template to R.
@@ -63,6 +66,7 @@ prepare_calibration <- function(
 #' @param extra_metadata Optional data frame containing extra metadata for loggers. This must have the column `logger_id` to join extra metadata. A `year_retrieved` column can also be provided to join based on a combination of logger and which session this is.
 #' @param filter_setting_list A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using 'read_filter_file()'. Defaults to 'seatrack_settings_list'.
 #' @param show_filter_plots A logical indicating whether to show individual filter plots for the default sun angle. Defaults to `TRUE`.
+#' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE. If TRUE, if an error occurs during processing of a logger/year combination, the function will stop and return an error message. If FALSE, the function will continue processing remaining logger/year combinations and will print a message indicating which logger/year combinations had errors.
 #' @concept processing_wrapper
 #' @export
 process_positions <- function(
@@ -73,7 +77,8 @@ process_positions <- function(
     output_directory,
     extra_metadata = NULL,
     filter_setting_list = seatrackRgls::seatrack_settings_list,
-    show_filter_plots = TRUE) {
+    show_filter_plots = TRUE,
+    stop_on_error = FALSE) {
     result <- process_folder(
         import_directory = import_directory,
         light_data_list = light_data_list,
@@ -83,6 +88,7 @@ process_positions <- function(
         show_filter_plots = show_filter_plots,
         calibration_mode = FALSE,
         extra_metadata = extra_metadata,
-        filter_setting_list = filter_setting_list
+        filter_setting_list = filter_setting_list,
+        stop_on_error = stop_on_error
     )
 }

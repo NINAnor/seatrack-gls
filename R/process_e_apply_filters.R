@@ -14,6 +14,7 @@
 #' @param prev_posdata_export An optional data frame containing previous position data for comparison in seasonal calibration. Defaults to NULL.
 #' @param type A string indicating the type of calibration: "main", "winter", or "summer". Defaults to "main". This setting is primarily for internal use during seasonal calibration. Generally users should only call this function with type = "main".
 #' @param calibration_mode A logical indicating whether to run in calibration mode. Defaults to FALSE.
+#' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE.
 #' @return If calibration_mode is FALSE, returns a list containing:
 #'          - `twilight_estimates`: A data frame of twilight estimates.
 #'          - `posdata_export`: A data frame of processed position data.
@@ -25,7 +26,7 @@
 apply_filters <- function(
     light_data, light_data_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
     show_filter_plots = FALSE, plotting_dir = NULL,
-    prev_posdata_export = NULL, type = "main", calibration_mode = FALSE) {
+    prev_posdata_export = NULL, type = "main", calibration_mode = FALSE, stop_on_error = FALSE) {
     light_data_calibration <- add_default_cols(light_data_calibration)
 
     if (is.na(light_data_calibration$sun_angle_start)) {
@@ -341,11 +342,16 @@ apply_filters <- function(
                         light_data_calibration,
                         logger_filter,
                         logger_colony_info,
-                        logger_extra_metadata
+                        logger_extra_metadata,
+                        show_filter_plots,
+                        plotting_dir
                     )
                 },
                 error = function(e) {
                     print(paste("Error during seasonal calibration:", e$message))
+                    if (stop_on_error) {
+                        stop(e)
+                    }
                     print("Proceeding without seasonal adjustments.")
 
                     return(list(
@@ -407,8 +413,9 @@ apply_filters <- function(
 }
 
 handle_seasonal_calibration <- function(
-    posdata_export, light_data, filtering, light_data_calibration, logger_filter, logger_colony_info, logger_extra_metadata = NULL) {
+    posdata_export, light_data, filtering, light_data_calibration, logger_filter, logger_colony_info, logger_extra_metadata = NULL, show_filter_plots = FALSE, plotting_dir = NULL) {
     print("Running seasonal calibration...")
+    print("Winter calibration...")
     winter_calibration <- apply_filters(
         light_data, light_data_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
         show_filter_plots = FALSE,
@@ -417,6 +424,7 @@ handle_seasonal_calibration <- function(
         type = "winter",
         calibration_mode = TRUE
     )
+    print("Summer calibration...")
     summer_calibration <- apply_filters(
         light_data, light_data_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
         show_filter_plots = FALSE,
@@ -428,6 +436,7 @@ handle_seasonal_calibration <- function(
     print(paste("Winter sun angles:", winter_calibration$sun_angle_start, winter_calibration$sun_angle_end))
     print(paste("Summer sun angles:", summer_calibration$sun_angle_start, summer_calibration$sun_angle_end))
     print("Recalculating positions with seasonal calibrations...")
+    print("Winter positions...")
     winter_pos <- apply_filters(
         light_data, winter_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
         show_filter_plots = FALSE,
@@ -436,6 +445,7 @@ handle_seasonal_calibration <- function(
         type = "winter",
         calibration_mode = FALSE
     )
+    print("Summer positions...")
     summer_pos <- apply_filters(
         light_data, summer_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
         show_filter_plots = FALSE,
@@ -503,6 +513,14 @@ handle_seasonal_calibration <- function(
     posdata_export_ws_af$lc <- NULL
     posdata_export_ws_af$argosfilter1 <- NULL
     posdata_export_ws_af$argosfilter2 <- NULL
+
+    export_filter_plot(
+        plot_seasonal_points(posdata_export_ws_af),
+        show_filter_plots = show_filter_plots,
+        plot_name = "6_seasonal_points",
+        logger_id_year = logger_id_year,
+        plotting_dir = plotting_dir
+    )
 
     return(list(
         posdata_export = posdata_export_ws_af,

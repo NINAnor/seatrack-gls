@@ -19,6 +19,7 @@
 #' @param output_dir An optional directory path to save processed outputs. Defaults to `NULL`.
 #' @param calibration_mode A logical indicating whether to run in calibration mode. Defaults to `TRUE`
 #' @param analyzer An optional string indicating the analyzer who provided calibration data, if this column is not provided in calibration data. Defaults to an empty string.
+#' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE.
 #' @return If calibration_mode is `FALSE`, returns a list containing:
 #'          - `twilight_estimates`: A data frame of twilight estimates.
 #'          - `posdata_export`: A data frame of processed position data.
@@ -40,7 +41,8 @@ process_logger_year <- function(
     plotting_dir = NULL,
     output_dir = NULL,
     calibration_mode = TRUE,
-    analyzer = "") {
+    analyzer = "",
+    stop_on_error = FALSE) {
     print(paste("Processing logger", logger_id, "for retrieval year", year))
     if(!is.null(logger_light_data)){
         file_info <- data.frame(
@@ -168,7 +170,8 @@ process_logger_year <- function(
         logger_extra_metadata = logger_extra_metadata,
         show_filter_plots = show_filter_plots,
         plotting_dir = plotting_dir,
-        calibration_mode = calibration_mode
+        calibration_mode = calibration_mode,
+        stop_on_error = stop_on_error
     )
 
     if (calibration_mode == FALSE) {
