@@ -214,3 +214,7 @@ It is worth examining the filter plots too.
 ![](example_files/figure-html/filterplot_11-1.png)
 
 ![](example_files/figure-html/filterplot_12-1.png)
+
+![](example_files/figure-html/filterplot_13-1.png)
+
+![](example_files/figure-html/filterplot_14-1.png)
