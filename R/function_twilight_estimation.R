@@ -36,7 +36,7 @@ twilight_estimation <- function(light_data, light_data_calibration, show_filter_
 
     # among small migrate tech. loggers (c65, f100) some throw an error when running twilightCalc, the code below fixes that:
     if (is.null(twilight_data) && light_data_calibration$logger_model %in% small_old_loggers) {
-        light_data$lux <- log(lu$lux)
+        light_data$lux <- log(light_data$lux) # was a non-existant object called "lu"
     }
 
     if (is.null(twilight_data) && light_data_calibration$logger_model %in% small_old_loggers) {
@@ -49,6 +49,11 @@ twilight_estimation <- function(light_data, light_data_calibration, show_filter_
             LightThreshold = light_data_calibration$light_threshold,
             maxLight = light_interval
         )
+    }
+
+    if (is.null(twilight_data)) {
+        print("Twilight estimation failed, returning NULL.")
+        return(NULL)
     }
 
 

@@ -6,9 +6,10 @@
 #' @param new_posdata_export A data frame containing new position data export with columns `tFirst`, `tSecond`, `type`.
 #' @param type A string indicating the type of sun angle sequence to use. Options are `"general"`, `"summer"`, or `"winter"`.
 #' @param model A string indicating the logger model. If the model is "LAT" or "LAT2800S", it retrieves the sun angles specific to those models. Default is an empty string.
+#'
 #' @return A list containing the optimal sun angles for the start and end of the track: `sun_angle_start` and `sun_angle_end`.
 #' @keywords internal
-compare_sun_angle <- function(prev_posdata_export, new_posdata_export, type, model = "") {
+compare_sun_angle <- function(prev_posdata_export, new_posdata_export, type, model = "", min_length = 40) {
     main_data <- prev_posdata_export[prev_posdata_export$eqfilter & !is.na(prev_posdata_export$lat) & prev_posdata_export$type == 1, ]
     sun_angle_seq <- get_sun_angle(type, model)
     compare_tracks <- data.frame(sun.angle = sun_angle_seq)
@@ -24,6 +25,11 @@ compare_sun_angle <- function(prev_posdata_export, new_posdata_export, type, mod
         latlon.sun <- data.frame(cbind(new_posdata_export[, c("tFirst", "tSecond", "type")], latlon.sun))
 
         season <- latlon.sun[latlon.sun$type == 1, ]
+        if (nrow(season) < min_length) {
+            print(paste("Sun angle", sun_angle_seq[t], "produces only", nrow(season), "points, skipping."))
+            compare_tracks$start_of_track[t] <- NA
+            next
+        }
         main_season <- main_data[as.Date(main_data$date_time) %in% as.Date(season$tFirst), ]
         season <- season[as.Date(season$tFirst) %in% as.Date(main_season$date_time), ]
         season$delta_lat_diff <- abs(main_season$lat - season$lat)
@@ -34,7 +40,8 @@ compare_sun_angle <- function(prev_posdata_export, new_posdata_export, type, mod
     sun_angle_start <- compare_tracks$sun.angle[compare_tracks$start_of_track == min(compare_tracks$start_of_track, na.rm = TRUE)][1]
     sun_angle_end <- compare_tracks$sun.angle[compare_tracks$end_of_track == min(compare_tracks$end_of_track, na.rm = TRUE)][1]
     if (is.null(sun_angle_start) || is.na(sun_angle_start)) {
-        stop("NULL")
+        sun_angle_start <- NA
+        sun_angle_end <- NA
     }
     return(list(sun_angle_start = sun_angle_start, sun_angle_end = sun_angle_end))
 }

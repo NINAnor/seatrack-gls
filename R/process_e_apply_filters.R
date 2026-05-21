@@ -47,12 +47,14 @@ apply_filters <- function(
         if (calibration_mode) {
             light_data_calibration$sun_angle_start <- get_default_sun_angle(type, light_data_calibration$logger_model)
             light_data_calibration$sun_angle_end <- light_data_calibration$sun_angle_start
+            print(paste("Using default sun angles for winter calibration:", light_data_calibration$sun_angle_start))
         }
         light_data_calibration$light_threshold <- min(light_data$lux) + 0.1
     } else if (type == "summer") {
         if (calibration_mode) {
             light_data_calibration$sun_angle_start <- get_default_sun_angle(type, light_data_calibration$logger_model)
             light_data_calibration$sun_angle_end <- light_data_calibration$sun_angle_start
+            print(paste("Using default sun angles for summer calibration:", light_data_calibration$sun_angle_start))
         }
         light_data_calibration$light_threshold <- get_threshold(light_data_calibration$logger_model, type)
     }
@@ -88,6 +90,11 @@ apply_filters <- function(
             logger_id_year = logger_id_year,
             plotting_dir
         )
+
+    if (is.null(twilight_data)) {
+        print("Twilight estimation failed, skipping further processing.")
+        return(NULL)
+    }
 
     filtering$nrow_twilightCalc <- nrow(twilight_data)
     print(paste("Estimated", filtering$nrow_twilightCalc, "twilights."))
@@ -330,21 +337,20 @@ apply_filters <- function(
     }
 
     if (!calibration_mode) {
-
         if (type == "main") {
             posdata_export$point_type <- "main"
             seasonal_calibration_result <- tryCatch(
                 {
                     handle_seasonal_calibration(
-                        posdata_export,
-                        light_data,
-                        filtering,
-                        light_data_calibration,
-                        logger_filter,
-                        logger_colony_info,
-                        logger_extra_metadata,
-                        show_filter_plots,
-                        plotting_dir
+                        posdata_export = posdata_export,
+                        light_data = light_data,
+                        filtering = filtering,
+                        light_data_calibration = light_data_calibration,
+                        logger_filter = logger_filter,
+                        logger_colony_info = logger_colony_info,
+                        logger_extra_metadata = logger_extra_metadata,
+                        show_filter_plots = show_filter_plots,
+                        plotting_dir = plotting_dir
                     )
                 },
                 error = function(e) {
@@ -392,7 +398,7 @@ apply_filters <- function(
     } else {
         if (type != "main") {
             print("Comparing sun angles to main calibration...")
-            new_sun_angles <- compare_sun_angle(prev_posdata_export, posdata_export, type, light_data_calibration$logger_model)
+            new_sun_angles <- compare_sun_angle(prev_posdata_export, posdata_export, type, light_data_calibration$logger_model, min_length = 40)
             light_data_calibration$sun_angle_start <- new_sun_angles$sun_angle_start
             light_data_calibration$sun_angle_end <- new_sun_angles$sun_angle_end
         } else {
@@ -433,57 +439,66 @@ handle_seasonal_calibration <- function(
         type = "summer",
         calibration_mode = TRUE
     )
-    print(paste("Winter sun angles:", winter_calibration$sun_angle_start, winter_calibration$sun_angle_end))
-    print(paste("Summer sun angles:", summer_calibration$sun_angle_start, summer_calibration$sun_angle_end))
     print("Recalculating positions with seasonal calibrations...")
-    print("Winter positions...")
-    winter_pos <- apply_filters(
-        light_data, winter_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
-        show_filter_plots = FALSE,
-        plotting_dir = NULL,
-        prev_posdata_export = posdata_export,
-        type = "winter",
-        calibration_mode = FALSE
-    )
-    print("Summer positions...")
-    summer_pos <- apply_filters(
-        light_data, summer_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
-        show_filter_plots = FALSE,
-        plotting_dir = NULL,
-        prev_posdata_export = posdata_export,
-        type = "summer",
-        calibration_mode = FALSE
-    )
-    print(paste("Calculated", nrow(winter_pos), "winter positions."))
-    print(paste("Calculated", nrow(summer_pos), "summer positions."))
+    print(paste("Winter sun angles:", winter_calibration$sun_angle_start, winter_calibration$sun_angle_end))
+    if (!is.null(winter_calibration) && !is.na(winter_calibration$sun_angle_start) && !is.na(winter_calibration$sun_angle_end)) {
+        print("Winter positions...")
+        winter_pos <- apply_filters(
+            light_data, winter_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
+            show_filter_plots = FALSE,
+            plotting_dir = NULL,
+            prev_posdata_export = posdata_export,
+            type = "winter",
+            calibration_mode = FALSE
+        )
+        print(paste("Calculated", nrow(winter_pos), "winter positions."))
+    } else {
+        winter_pos <- NULL
+    }
+
+    print(paste("Summer sun angles:", summer_calibration$sun_angle_start, summer_calibration$sun_angle_end))
+    if (!is.null(summer_calibration) && !is.na(summer_calibration$sun_angle_start) && !is.na(summer_calibration$sun_angle_end)) {
+        print("Summer positions...")
+        summer_pos <- apply_filters(
+            light_data, summer_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
+            show_filter_plots = FALSE,
+            plotting_dir = NULL,
+            prev_posdata_export = posdata_export,
+            type = "summer",
+            calibration_mode = FALSE
+        )
+        print(paste("Calculated", nrow(summer_pos), "summer positions."))
+    } else {
+        summer_pos <- NULL
+    }
+
+
     print("Combining seasonal positions...")
-    # if (logger_colony_info$col_lat > 0) {
-    #     summer_days <- c(98:247)
-    #     winter_days <- c(290:366, 1:50)
-    # } else {
-    #     summer_days <- c(285:366, 1:60)
-    #     winter_days <- c(110:210)
-    # }
-    # if (light_data_calibration$species %in% c("Arctic tern", "arctic tern", "Sterna paradisaea", "sterna paradisaea", "ARTE")) {
-    #     summer_days <- c(285:366, 1:60, 110:247)
-    #     winter_days <- c(285:366, 1:60, 110:247)
-    # }
-    # add_to_summer <- summer_pos[lubridate::yday(summer_pos$date_time) %in% summer_days, ]
-    summer_pos$point_type <- "summer"
-    add_to_summer <- summer_pos[!(as.Date(summer_pos$date_time) %in% as.Date(posdata_export$date_time)), ]
+    posdata_export_w_s <- posdata_export
 
+    if (!is.null(summer_pos)) {
+        summer_pos$point_type <- "summer"
+        add_to_summer <- summer_pos[!(as.Date(summer_pos$date_time) %in% as.Date(posdata_export_w_s$date_time)), ]
 
-    posdata_export_w_s <- rbind(posdata_export, add_to_summer)
-    print(paste("Added", nrow(add_to_summer), "positions from summer seasonal calibration."))
-    filtering$added_summer_positions <- nrow(add_to_summer)
+        posdata_export_w_s <- rbind(posdata_export_w_s, add_to_summer)
+        print(paste("Added", nrow(add_to_summer), "positions from summer seasonal calibration."))
+        filtering$added_summer_positions <- nrow(add_to_summer)
+    } else {
+        print("Summer calibration did not produce valid sun angles, skipping seasonal adjustment for summer.")
+        filtering$added_summer_positions <- 0
+    }
 
-    # add_to_winter <- winter_pos[lubridate::yday(winter_pos$date_time) %in% winter_days, ]
-    winter_pos$point_type <- "winter"
-    add_to_winter <- winter_pos[!(as.Date(winter_pos$date_time) %in% as.Date(posdata_export_w_s$date_time)), ]
+    if (!is.null(winter_pos)) {
+        winter_pos$point_type <- "winter"
+        add_to_winter <- winter_pos[!(as.Date(winter_pos$date_time) %in% as.Date(posdata_export_w_s$date_time)), ]
 
-    posdata_export_w_s <- rbind(posdata_export_w_s, add_to_winter)
-    print(paste("Added", nrow(add_to_winter), "positions from winter seasonal calibration."))
-    filtering$added_winter_positions <- nrow(add_to_winter)
+        posdata_export_w_s <- rbind(posdata_export_w_s, add_to_winter)
+        print(paste("Added", nrow(add_to_winter), "positions from winter seasonal calibration."))
+        filtering$added_winter_positions <- nrow(add_to_winter)
+    } else {
+        print("Winter calibration did not produce valid sun angles, skipping seasonal adjustment for winter.")
+        filtering$added_winter_positions <- 0
+    }
 
     posdata_export_w_s <- posdata_export_w_s[order(posdata_export_w_s$date_time), ]
     filtering$added_seasonal_positions <- nrow(posdata_export_w_s) - nrow(posdata_export)
@@ -513,6 +528,8 @@ handle_seasonal_calibration <- function(
     posdata_export_ws_af$lc <- NULL
     posdata_export_ws_af$argosfilter1 <- NULL
     posdata_export_ws_af$argosfilter2 <- NULL
+
+    logger_id_year <- paste0(light_data_calibration$logger_id, "_", light_data_calibration$year_tracked)
 
     export_filter_plot(
         plot_seasonal_points(posdata_export_ws_af),

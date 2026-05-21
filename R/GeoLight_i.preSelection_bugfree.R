@@ -24,6 +24,10 @@ i.preSelection_bugfree <- function(datetime, light, LightThreshold) {
   # df1 <- data.frame(datetime=st+(30*60),light=as.numeric(h))
 
   smooth <- i.twilightEvents(df1[, 1], df1[, 2], LightThreshold)
+  if (nrow(smooth) == 0) {
+    stop("No twilight events detected in pre-selection.")
+  }
+
   smooth <- data.frame(id = 1:nrow(smooth), smooth)
   raw <- i.twilightEvents(datetime, light, LightThreshold)
   raw <- data.frame(id = 1:nrow(raw), raw)

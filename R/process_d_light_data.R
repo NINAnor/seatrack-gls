@@ -73,6 +73,8 @@ process_logger_light_data <- function(
                 result <- light_data_calibration
                 result <- add_default_cols(result)
                 result$problem <- TRUE
+            }else {
+                result <- NULL
             }
         } else {
             result <- tryCatch(
