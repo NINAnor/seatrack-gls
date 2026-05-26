@@ -90,6 +90,9 @@ process_logger_light_data <- function(
                         calibration_mode = calibration_mode,
                         stop_on_error = stop_on_error
                     )
+                    if (calibration_mode && (is.null(process_result) || nrow(process_result) == 0)) {
+                        stop("No results returned")
+                    }
                     if (calibration_mode) {
                         process_result$problem <- FALSE
                     }
