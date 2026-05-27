@@ -29,13 +29,9 @@ apply_filters <- function(
     prev_posdata_export = NULL, type = "main", calibration_mode = FALSE, stop_on_error = FALSE) {
     light_data_calibration <- add_default_cols(light_data_calibration)
 
-    if (is.na(light_data_calibration$sun_angle_start)) {
-        if (type != "main") {
-            stop("Provide manual calibration values before continuing.")
-        } else if (!calibration_mode) {
-            print("Skipping due to lack of calibration values.")
-            return(NULL)
-        }
+    if (is.na(light_data_calibration$sun_angle_start) && !calibration_mode) {
+        print("Skipping due to lack of calibration values.")
+        return(NULL)
     }
 
     # Fill in default if neccesary
@@ -58,6 +54,8 @@ apply_filters <- function(
         }
         light_data_calibration$light_threshold <- get_threshold(light_data_calibration$logger_model, type)
     }
+    light_data_calibration$light_threshold <- as.numeric(light_data_calibration$light_threshold)
+    print(paste("Using sun angles:", light_data_calibration$sun_angle_start, "to", light_data_calibration$sun_angle_end, "and light threshold:", light_data_calibration$light_threshold))
 
     if (!is.null(light_data_calibration$breeding_start_month)) {
         print("Using breeding months from calibration data")
@@ -245,6 +243,7 @@ apply_filters <- function(
     # END OF FILTERING---------------------------------
 
     posdata_ds <- double_smoothing(df = posdata_ms, sun = get_sun_angle_seq(posdata_ms, light_data_calibration))
+
     print("Applied double smoothing to final positions.")
     filter_df <- logger_filter
     filter_df$months_breeding_start <- filter_df$months_breeding[1]
@@ -309,7 +308,7 @@ apply_filters <- function(
         boundary.box_ymax,
         analyzer
     )
-
+    
     if (!is.null(logger_extra_metadata)) {
         posdata_export <- dplyr::left_join(posdata_export, logger_extra_metadata, by = "logger_id")
     }
