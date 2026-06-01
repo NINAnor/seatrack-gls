@@ -22,13 +22,14 @@
 #' each logger/year combination.
 #' @param export_calibration_template A logical indicating whether to export an excel calibration template. Defaults to `TRUE`. If `FALSE`, the calibration template is returned.
 #' @param overwrite_calibration A logical indicating whether to overwrite existing calibration output. Defaults to `FALSE`. If `FALSE`, if a calibration output directory already exists, the function will skip processing and return.
+#' @param do_seasonal_calibration A logical indicating whether to perform seasonal calibration. Defaults to NULL, which uses the filter_settings_list.
 #' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE. If TRUE, if an error occurs during processing of a logger/year combination, the function will stop and return an error message. If FALSE, the function will continue processing remaining logger/year combinations and will print a message indicating which logger/year combinations had errors.
 #' @concept processing
 #' @export
 process_folder <- function(
     import_directory = NULL, calibration_data, all_colony_info, light_data_list = NULL,
     filter_setting_list = seatrackRgls::seatrack_settings_list, extra_metadata = NULL, show_filter_plots = FALSE,
-    output_dir = NULL, calibration_mode = TRUE, export_calibration_template = TRUE, overwrite_calibration = FALSE, stop_on_error = FALSE) {
+    output_dir = NULL, calibration_mode = TRUE, export_calibration_template = TRUE, overwrite_calibration = FALSE, do_seasonal_calibration = NULL, stop_on_error = FALSE) {
     if (is.null(import_directory) && is.null(light_data_list)) {
         stop("Either import_directory or light_data_list must be provided.")
     }
@@ -103,6 +104,7 @@ process_folder <- function(
             plotting_dir = output_dir,
             output_dir = folder_result_output_dir,
             calibration_mode = calibration_mode,
+            do_seasonal_calibration = do_seasonal_calibration,
             stop_on_error = stop_on_error
         )
         if (calibration_mode) {

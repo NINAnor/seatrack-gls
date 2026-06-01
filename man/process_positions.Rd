@@ -12,7 +12,9 @@ process_positions(
   output_directory,
   extra_metadata = NULL,
   filter_setting_list = seatrackRgls::seatrack_settings_list,
-  show_filter_plots = TRUE
+  show_filter_plots = TRUE,
+  do_seasonal_calibration = NULL,
+  stop_on_error = FALSE
 )
 }
 \arguments{
@@ -31,6 +33,10 @@ process_positions(
 \item{filter_setting_list}{A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using 'read_filter_file()'. Defaults to 'seatrack_settings_list'.}
 
 \item{show_filter_plots}{A logical indicating whether to show individual filter plots for the default sun angle. Defaults to \code{TRUE}.}
+
+\item{do_seasonal_calibration}{A logical indicating whether to perform seasonal calibration. Defaults to NULL, which uses the filter_settings_list.}
+
+\item{stop_on_error}{A logical indicating whether to stop processing if an error occurs. Defaults to FALSE. If TRUE, if an error occurs during processing of a logger/year combination, the function will stop and return an error message. If FALSE, the function will continue processing remaining logger/year combinations and will print a message indicating which logger/year combinations had errors.}
 }
 \description{
 Convience function for processing GLS logger data using provided calibration values. Uses 'process_folder()' to process a folder of light data. See 'process_folder()' for more details.

@@ -119,7 +119,7 @@ GLSFilterSettingsList <- R6::R6Class(
         get_settings_from_list = function(species = NULL, colony = NULL, logger_id = NULL, years_tracked = NULL) {
             print(paste("Searching for matching filter settings for species:", species, "colony:", colony, "logger_id:", logger_id, "years_tracked:", years_tracked))
             for (settings_obj in self$filter_list) {
-                if (settings_obj$check_settings_for(species, colony, logger_id, years_tracked)) {
+                if (settings_obj$check_settings_for(species = species, colony = colony, logger_id = logger_id, years_tracked = years_tracked)) {
                     print("Found matching settings with species, colony, logger_id, years_tracked.")
                     return(settings_obj$settings)
                 }
@@ -128,7 +128,7 @@ GLSFilterSettingsList <- R6::R6Class(
             print(paste("Searching for matching filter settings for species:", species, "colony:", colony, "logger_id:", logger_id))
             # Try with all three identifiers
             for (settings_obj in self$filter_list) {
-                if (settings_obj$check_settings_for(species, colony, logger_id)) {
+                if (settings_obj$check_settings_for(species = species, colony = colony, logger_id = logger_id)) {
                     print("Found matching settings with species, colony, and logger_id.")
                     return(settings_obj$settings)
                 }
@@ -136,7 +136,7 @@ GLSFilterSettingsList <- R6::R6Class(
             print(paste("Searching for matching filter settings for species:", species, "colony:", colony))
             # Try with species and colony
             for (settings_obj in self$filter_list) {
-                if (settings_obj$check_settings_for(species, colony, NULL)) {
+                if (settings_obj$check_settings_for(species = species, colony = colony)) {
                     print("Found matching settings with species and colony.")
                     return(settings_obj$settings)
                 }
@@ -144,7 +144,7 @@ GLSFilterSettingsList <- R6::R6Class(
             print(paste("Searching for matching filter settings for species:", species))
             # Try with species only
             for (settings_obj in self$filter_list) {
-                if (settings_obj$check_settings_for(species, NULL, NULL)) {
+                if (settings_obj$check_settings_for(species = species)) {
                     print("Found matching settings with species only.")
                     return(settings_obj$settings)
                 }
@@ -185,45 +185,85 @@ read_filter_file <- function(filepath) {
         row <- filter_df[i, ]
         settings <- as.list(row)
         # Convert boundary.box and months_breeding from string to numeric vector
-        settings$boundary.box <- sf::st_bbox(c(
-            xmin = as.numeric(settings$boundary.box_xmin),
-            xmax = as.numeric(settings$boundary.box_xmax),
-            ymin = as.numeric(settings$boundary.box_ymin),
-            ymax = as.numeric(settings$boundary.box_ymax)
-        ))
-        settings$boundary.box_xmin <- NULL
-        settings$boundary.box_xmax <- NULL
-        settings$boundary.box_ymin <- NULL
-        settings$boundary.box_ymax <- NULL
+        if (is.null(settings$boundary.box_xmin) || is.null(settings$boundary.box_xmax) || is.null(settings$boundary.box_ymin) || is.null(settings$boundary.box_ymax)) {
+            settings$boundary.box <- sf::st_bbox(c(-180, 180, -90, 90))
+        } else {
+            settings$boundary.box <- sf::st_bbox(c(
+                xmin = as.numeric(settings$boundary.box_xmin),
+                xmax = as.numeric(settings$boundary.box_xmax),
+                ymin = as.numeric(settings$boundary.box_ymin),
+                ymax = as.numeric(settings$boundary.box_ymax)
+            ))
+            settings$boundary.box_xmin <- NULL
+            settings$boundary.box_xmax <- NULL
+            settings$boundary.box_ymin <- NULL
+            settings$boundary.box_ymax <- NULL
+        }
+        if (is.null(settings$months_breeding_start) || is.null(settings$months_breeding_end)) {
+            settings$months_breeding <- get_breeding_month_seq(6, 8)
+        } else {
+            settings$months_breeding <- get_breeding_month_seq(settings$months_breeding_start, settings$months_breeding_end)
 
-        settings$months_breeding <- get_breeding_month_seq(settings$months_breeding_start, settings$months_breeding_end)
+            settings$months_breeding_start <- NULL
+            settings$months_breeding_end <- NULL
+        }
 
-        settings$months_breeding_start <- NULL
-        settings$months_breeding_end <- NULL
-
-        if (is.na(settings$coast_to_sea)) {
+        if (is.null(settings$coast_to_sea) || is.na(settings$coast_to_sea)) {
             settings$coast_to_sea <- Inf
         }
-        if (is.na(settings$coast_to_land)) {
+        if (is.null(settings$coast_to_land) || is.na(settings$coast_to_land)) {
             settings$coast_to_land <- Inf
         }
 
-        if (is.na(settings$logger_id)) {
+        if (is.null(settings$loess_filter_k) || is.na(settings$loess_filter_k)) {
+            settings$loess_filter_k <- 6
+        }
+
+        if (is.null(settings$split_years) || is.na(settings$split_years)) {
+            settings$split_years <- "06-01"
+        }
+
+        if (is.null(settings$literature_speed) || is.na(settings$literature_speed)) {
+            settings$literature_speed <- 70
+        }
+
+        if (is.null(settings$latin) || is.na(settings$latin)) {
+            settings$latin <- NA
+        }
+
+        if (is.null(settings$noon_filter) || is.na(settings$noon_filter)) {
+            settings$noon_filter <- TRUE
+        }
+
+        if (is.null(settings$daylength_filter) || is.na(settings$daylength_filter)) {
+            settings$daylength_filter <- TRUE
+        }
+
+        if (is.null(settings$midnightsun_removal) || is.na(settings$midnightsun_removal)) {
+            settings$midnightsun_removal <- TRUE
+        }
+
+        if (is.null(settings$seasonal_calibration) || is.na(settings$seasonal_calibration)) {
+            settings$seasonal_calibration <- TRUE
+        }
+
+        if (is.null(settings$logger_id) || is.na(settings$logger_id)) {
             logger_id <- NULL
         } else {
             logger_id <- settings$logger_id
         }
-        if (is.na(settings$species)) {
+
+        if (is.null(settings$species) || is.na(settings$species)) {
             species <- NULL
         } else {
             species <- settings$species
         }
-        if (is.na(settings$colony)) {
+        if (is.null(settings$colony) || is.na(settings$colony)) {
             colony <- NULL
         } else {
             colony <- settings$colony
         }
-        if (is.na(settings$years_tracked)) {
+        if (is.null(settings$years_tracked) || is.na(settings$years_tracked)) {
             years_tracked <- NULL
         } else {
             years_tracked <- settings$years_tracked

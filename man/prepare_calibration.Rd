@@ -13,7 +13,8 @@ prepare_calibration(
   show_filter_plots = FALSE,
   export_calibration_template = TRUE,
   filter_setting_list = seatrackRgls::seatrack_settings_list,
-  overwrite_calibration = FALSE
+  overwrite_calibration = FALSE,
+  stop_on_error = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ Alternatively, custom time windows can be provided by including columns \code{st
 \item{filter_setting_list}{A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using \code{\link[=read_filter_file]{read_filter_file()}}. Defaults to 'seatrackRgls::seatrack_settings_list'.}
 
 \item{overwrite_calibration}{A logical indicating whether to overwrite existing calibration output. Defaults to \code{FALSE}. If \code{FALSE}, if a calibration output directory already exists, the function will skip processing and return.}
+
+\item{stop_on_error}{A logical indicating whether to stop processing if an error occurs. Defaults to FALSE. If TRUE, if an error occurs during processing of a logger/year combination, the function will stop and return an error message. If FALSE, the function will continue processing remaining logger/year combinations and will print a message indicating which logger/year combinations had errors.}
 }
 \description{
 Convience function for preparing GLS logger data for light data calibration. Uses \code{process_folder()} in calibration mode to handle a directory of light data. See 'process_folder()' for more details.

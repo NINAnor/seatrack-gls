@@ -14,7 +14,9 @@ apply_filters(
   plotting_dir = NULL,
   prev_posdata_export = NULL,
   type = "main",
-  calibration_mode = FALSE
+  calibration_mode = FALSE,
+  do_seasonal_calibration = NULL,
+  stop_on_error = FALSE
 )
 }
 \arguments{
@@ -37,6 +39,10 @@ apply_filters(
 \item{type}{A string indicating the type of calibration: "main", "winter", or "summer". Defaults to "main". This setting is primarily for internal use during seasonal calibration. Generally users should only call this function with type = "main".}
 
 \item{calibration_mode}{A logical indicating whether to run in calibration mode. Defaults to FALSE.}
+
+\item{do_seasonal_calibration}{A logical indiciating whether to attempt to override the logger_filter setting to carry out seasonal calibrations. Defaults to NULL}
+
+\item{stop_on_error}{A logical indicating whether to stop processing if an error occurs. Defaults to FALSE.}
 }
 \value{
 If calibration_mode is FALSE, returns a list containing:

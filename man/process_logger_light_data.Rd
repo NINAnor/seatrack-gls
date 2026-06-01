@@ -14,7 +14,9 @@ process_logger_light_data(
   show_filter_plots = FALSE,
   plotting_dir = NULL,
   calibration_mode = TRUE,
-  min_length = 40
+  min_length = 40,
+  do_seasonal_calibration = NULL,
+  stop_on_error = FALSE
 )
 }
 \arguments{
@@ -37,6 +39,10 @@ process_logger_light_data(
 \item{calibration_mode}{A logical indicating whether to run in calibration mode. Defaults to TRUE.}
 
 \item{min_length}{Number indicating minimum length of light data. Anything below this will fail. Defaults to 40.}
+
+\item{do_seasonal_calibration}{A logical indicating whether to perform seasonal calibration. Defaults to NULL, which uses the filter_settings_list.}
+
+\item{stop_on_error}{A logical indicating whether to stop processing if an error occurs. Defaults to FALSE.}
 }
 \value{
 If calibration_mode is FALSE, returns a list containing:

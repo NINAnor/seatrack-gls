@@ -14,6 +14,7 @@
 #' @param prev_posdata_export An optional data frame containing previous position data for comparison in seasonal calibration. Defaults to NULL.
 #' @param type A string indicating the type of calibration: "main", "winter", or "summer". Defaults to "main". This setting is primarily for internal use during seasonal calibration. Generally users should only call this function with type = "main".
 #' @param calibration_mode A logical indicating whether to run in calibration mode. Defaults to FALSE.
+#' @param do_seasonal_calibration A logical indiciating whether to attempt to override the logger_filter setting to carry out seasonal calibrations. Defaults to NULL
 #' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE.
 #' @return If calibration_mode is FALSE, returns a list containing:
 #'          - `twilight_estimates`: A data frame of twilight estimates.
@@ -26,12 +27,16 @@
 apply_filters <- function(
     light_data, light_data_calibration, logger_filter, logger_colony_info, logger_extra_metadata,
     show_filter_plots = FALSE, plotting_dir = NULL,
-    prev_posdata_export = NULL, type = "main", calibration_mode = FALSE, stop_on_error = FALSE) {
+    prev_posdata_export = NULL, type = "main", calibration_mode = FALSE, do_seasonal_calibration = NULL, stop_on_error = FALSE) {
     light_data_calibration <- add_default_cols(light_data_calibration)
 
     if (is.na(light_data_calibration$sun_angle_start) && !calibration_mode) {
         print("Skipping due to lack of calibration values.")
         return(NULL)
+    }
+
+    if (!is.null(do_seasonal_calibration)) {
+        logger_filter$seasonal_calibration <- do_seasonal_calibration
     }
 
     # Fill in default if neccesary
@@ -64,6 +69,8 @@ apply_filters <- function(
         print("Using breeding months from filter settings")
         months_breeding <- logger_filter$months_breeding
     }
+
+
 
     filtering <- data.frame(
         logger_id = light_data_calibration$logger_id,
@@ -308,7 +315,7 @@ apply_filters <- function(
         boundary.box_ymax,
         analyzer
     )
-    
+
     if (!is.null(logger_extra_metadata)) {
         posdata_export <- dplyr::left_join(posdata_export, logger_extra_metadata, by = "logger_id")
     }
@@ -338,38 +345,41 @@ apply_filters <- function(
     if (!calibration_mode) {
         if (type == "main") {
             posdata_export$point_type <- "main"
-            seasonal_calibration_result <- tryCatch(
-                {
-                    handle_seasonal_calibration(
-                        posdata_export = posdata_export,
-                        light_data = light_data,
-                        filtering = filtering,
-                        light_data_calibration = light_data_calibration,
-                        logger_filter = logger_filter,
-                        logger_colony_info = logger_colony_info,
-                        logger_extra_metadata = logger_extra_metadata,
-                        show_filter_plots = show_filter_plots,
-                        plotting_dir = plotting_dir
-                    )
-                },
-                error = function(e) {
-                    print(paste("Error during seasonal calibration:", e$message))
-                    if (stop_on_error) {
-                        stop(e)
+            if (logger_filter$seasonal_calibration) {
+                seasonal_calibration_result <- tryCatch(
+                    {
+                        handle_seasonal_calibration(
+                            posdata_export = posdata_export,
+                            light_data = light_data,
+                            filtering = filtering,
+                            light_data_calibration = light_data_calibration,
+                            logger_filter = logger_filter,
+                            logger_colony_info = logger_colony_info,
+                            logger_extra_metadata = logger_extra_metadata,
+                            show_filter_plots = show_filter_plots,
+                            plotting_dir = plotting_dir
+                        )
+                    },
+                    error = function(e) {
+                        print(paste("Error during seasonal calibration:", e$message))
+                        if (stop_on_error) {
+                            stop(e)
+                        }
+                        print("Proceeding without seasonal adjustments.")
+
+                        return(list(
+                            posdata_export = posdata_export,
+                            filtering = filtering
+                        ))
                     }
-                    print("Proceeding without seasonal adjustments.")
-
-                    return(list(
-                        posdata_export = posdata_export,
-                        filtering = filtering
-                    ))
-                }
-            )
+                )
 
 
-
-            posdata_export_ws_af <- seasonal_calibration_result$posdata_export
-            filtering <- seasonal_calibration_result$filtering
+                posdata_export_ws_af <- seasonal_calibration_result$posdata_export
+                filtering <- seasonal_calibration_result$filtering
+            } else {
+                posdata_export_ws_af <- posdata_export
+            }
 
             # Run land mask filter
             print("Applying land mask filter...")

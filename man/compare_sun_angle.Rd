@@ -4,7 +4,13 @@
 \alias{compare_sun_angle}
 \title{Compare Sun Angles to Optimize Position Estimation}
 \usage{
-compare_sun_angle(prev_posdata_export, new_posdata_export, type, model = "")
+compare_sun_angle(
+  prev_posdata_export,
+  new_posdata_export,
+  type,
+  model = "",
+  min_length = 40
+)
 }
 \arguments{
 \item{prev_posdata_export}{A data frame containing previous position data export with columns \code{eqfilter}, \code{lat}, \code{type}, and \code{date_time}.}

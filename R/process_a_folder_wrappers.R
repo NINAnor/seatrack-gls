@@ -66,6 +66,7 @@ prepare_calibration <- function(
 #' @param extra_metadata Optional data frame containing extra metadata for loggers. This must have the column `logger_id` to join extra metadata. A `year_retrieved` column can also be provided to join based on a combination of logger and which session this is.
 #' @param filter_setting_list A 'GLSFilterSettingsList' object containing filter settings for loggers or a path to load one using 'read_filter_file()'. Defaults to 'seatrack_settings_list'.
 #' @param show_filter_plots A logical indicating whether to show individual filter plots for the default sun angle. Defaults to `TRUE`.
+#' @param do_seasonal_calibration A logical indicating whether to perform seasonal calibration. Defaults to NULL, which uses the filter_settings_list.
 #' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE. If TRUE, if an error occurs during processing of a logger/year combination, the function will stop and return an error message. If FALSE, the function will continue processing remaining logger/year combinations and will print a message indicating which logger/year combinations had errors.
 #' @concept processing_wrapper
 #' @export
@@ -78,6 +79,7 @@ process_positions <- function(
     extra_metadata = NULL,
     filter_setting_list = seatrackRgls::seatrack_settings_list,
     show_filter_plots = TRUE,
+    do_seasonal_calibration = NULL,
     stop_on_error = FALSE) {
     result <- process_folder(
         import_directory = import_directory,
@@ -89,6 +91,7 @@ process_positions <- function(
         calibration_mode = FALSE,
         extra_metadata = extra_metadata,
         filter_setting_list = filter_setting_list,
+        do_seasonal_calibration = do_seasonal_calibration,
         stop_on_error = stop_on_error
     )
 }

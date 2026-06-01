@@ -15,7 +15,9 @@ process_folder(
   output_dir = NULL,
   calibration_mode = TRUE,
   export_calibration_template = TRUE,
-  overwrite_calibration = FALSE
+  overwrite_calibration = FALSE,
+  do_seasonal_calibration = NULL,
+  stop_on_error = FALSE
 )
 }
 \arguments{
@@ -46,6 +48,10 @@ each logger/year combination.}
 \item{export_calibration_template}{A logical indicating whether to export an excel calibration template. Defaults to \code{TRUE}. If \code{FALSE}, the calibration template is returned.}
 
 \item{overwrite_calibration}{A logical indicating whether to overwrite existing calibration output. Defaults to \code{FALSE}. If \code{FALSE}, if a calibration output directory already exists, the function will skip processing and return.}
+
+\item{do_seasonal_calibration}{A logical indicating whether to perform seasonal calibration. Defaults to NULL, which uses the filter_settings_list.}
+
+\item{stop_on_error}{A logical indicating whether to stop processing if an error occurs. Defaults to FALSE. If TRUE, if an error occurs during processing of a logger/year combination, the function will stop and return an error message. If FALSE, the function will continue processing remaining logger/year combinations and will print a message indicating which logger/year combinations had errors.}
 }
 \description{
 Given an import directory containing light data files this function processes all light data files in the folder.

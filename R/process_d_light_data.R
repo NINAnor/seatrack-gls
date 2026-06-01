@@ -13,6 +13,7 @@
 #' @param plotting_dir An optional directory path to save plotting outputs. Defaults to NULL.
 #' @param calibration_mode A logical indicating whether to run in calibration mode. Defaults to TRUE.
 #' @param min_length Number indicating minimum length of light data. Anything below this will fail. Defaults to 40.
+#' @param do_seasonal_calibration A logical indicating whether to perform seasonal calibration. Defaults to NULL, which uses the filter_settings_list.
 #' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE.
 #'
 #' @concept processing
@@ -32,6 +33,7 @@ process_logger_light_data <- function(
     plotting_dir = NULL,
     calibration_mode = TRUE,
     min_length = 40,
+    do_seasonal_calibration = NULL,
     stop_on_error = FALSE) {
     # create dir for plotting
     if (!is.null(plotting_dir) && !dir.exists(plotting_dir)) {
@@ -88,7 +90,8 @@ process_logger_light_data <- function(
                         show_filter_plots = show_filter_plots,
                         plotting_dir = plotting_dir,
                         calibration_mode = calibration_mode,
-                        stop_on_error = stop_on_error
+                        stop_on_error = stop_on_error,
+                        do_seasonal_calibration = do_seasonal_calibration
                     )
                     if (calibration_mode && (is.null(process_result) || nrow(process_result) == 0)) {
                         stop("No results returned")

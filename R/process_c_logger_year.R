@@ -19,6 +19,7 @@
 #' @param output_dir An optional directory path to save processed outputs. Defaults to `NULL`.
 #' @param calibration_mode A logical indicating whether to run in calibration mode. Defaults to `TRUE`
 #' @param analyzer An optional string indicating the analyzer who provided calibration data, if this column is not provided in calibration data. Defaults to an empty string.
+#' @param do_seasonal_calibration A logical indicating whether to perform seasonal calibration. Defaults to NULL, which uses the filter_settings_list.
 #' @param stop_on_error A logical indicating whether to stop processing if an error occurs. Defaults to FALSE.
 #' @return If calibration_mode is `FALSE`, returns a list containing:
 #'          - `twilight_estimates`: A data frame of twilight estimates.
@@ -42,6 +43,7 @@ process_logger_year <- function(
     output_dir = NULL,
     calibration_mode = TRUE,
     analyzer = "",
+    do_seasonal_calibration = NULL,
     stop_on_error = FALSE) {
     print(paste("Processing logger", logger_id, "for retrieval year", year))
     if(!is.null(logger_light_data)){
@@ -77,7 +79,7 @@ process_logger_year <- function(
         filter_setting_list <- read_filter_file(filter_setting_list)
     }
     # Get logger filter settings
-    logger_filter <- filter_setting_list$get_settings_from_list(species = logger_calibration_data$species[1], colony = logger_calibration_data$colony[1], logger_id = logger_calibration_data$logger_id)
+
 
     if (is.null(logger_calibration_data$logger_model)) {
         print("logger_model not found in calibration_data, setting to empty string")
@@ -115,6 +117,7 @@ process_logger_year <- function(
         if (nrow(logger_calibration_data) == 0) {
             stop("No calibration data for this logger/year combination")
         }
+        logger_filter <- filter_setting_list$get_settings_from_list(species = logger_calibration_data$species[1], colony = logger_calibration_data$colony[1], logger_id = logger_calibration_data$logger_id[1])
 
         # split by deployment/retrieval dates
         time_windows <- get_calibration_splits(logger_calibration_data, logger_filter$split_years)
@@ -171,6 +174,7 @@ process_logger_year <- function(
         show_filter_plots = show_filter_plots,
         plotting_dir = plotting_dir,
         calibration_mode = calibration_mode,
+        do_seasonal_calibration = do_seasonal_calibration,
         stop_on_error = stop_on_error
     )
 
