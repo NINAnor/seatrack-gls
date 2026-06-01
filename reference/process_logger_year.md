@@ -24,7 +24,9 @@ process_logger_year(
   plotting_dir = NULL,
   output_dir = NULL,
   calibration_mode = TRUE,
-  analyzer = ""
+  analyzer = "",
+  do_seasonal_calibration = NULL,
+  stop_on_error = FALSE
 )
 ```
 
@@ -106,6 +108,16 @@ process_logger_year(
   An optional string indicating the analyzer who provided calibration
   data, if this column is not provided in calibration data. Defaults to
   an empty string.
+
+- do_seasonal_calibration:
+
+  A logical indicating whether to perform seasonal calibration. Defaults
+  to NULL, which uses the filter_settings_list.
+
+- stop_on_error:
+
+  A logical indicating whether to stop processing if an error occurs.
+  Defaults to FALSE.
 
 ## Value
 

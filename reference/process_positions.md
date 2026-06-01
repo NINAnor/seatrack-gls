@@ -17,7 +17,9 @@ process_positions(
   output_directory,
   extra_metadata = NULL,
   filter_setting_list = seatrackRgls::seatrack_settings_list,
-  show_filter_plots = TRUE
+  show_filter_plots = TRUE,
+  do_seasonal_calibration = NULL,
+  stop_on_error = FALSE
 )
 ```
 
@@ -68,6 +70,20 @@ process_positions(
 
   A logical indicating whether to show individual filter plots for the
   default sun angle. Defaults to `TRUE`.
+
+- do_seasonal_calibration:
+
+  A logical indicating whether to perform seasonal calibration. Defaults
+  to NULL, which uses the filter_settings_list.
+
+- stop_on_error:
+
+  A logical indicating whether to stop processing if an error occurs.
+  Defaults to FALSE. If TRUE, if an error occurs during processing of a
+  logger/year combination, the function will stop and return an error
+  message. If FALSE, the function will continue processing remaining
+  logger/year combinations and will print a message indicating which
+  logger/year combinations had errors.
 
 ## Details
 

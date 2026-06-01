@@ -18,7 +18,9 @@ apply_filters(
   plotting_dir = NULL,
   prev_posdata_export = NULL,
   type = "main",
-  calibration_mode = FALSE
+  calibration_mode = FALSE,
+  do_seasonal_calibration = NULL,
+  stop_on_error = FALSE
 )
 ```
 
@@ -69,6 +71,16 @@ apply_filters(
 
   A logical indicating whether to run in calibration mode. Defaults to
   FALSE.
+
+- do_seasonal_calibration:
+
+  A logical indiciating whether to attempt to override the logger_filter
+  setting to carry out seasonal calibrations. Defaults to NULL
+
+- stop_on_error:
+
+  A logical indicating whether to stop processing if an error occurs.
+  Defaults to FALSE.
 
 ## Value
 

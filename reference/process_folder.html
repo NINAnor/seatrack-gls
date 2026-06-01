@@ -61,7 +61,9 @@ If not in calibration mode, it exports processed position data, filtering summar
 <span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  calibration_mode <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  export_calibration_template <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  overwrite_calibration <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  overwrite_calibration <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  do_seasonal_calibration <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stop_on_error <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -117,6 +119,14 @@ each logger/year combination.</p></dd>
 
 <dt id="arg-overwrite-calibration">overwrite_calibration<a class="anchor" aria-label="anchor" href="#arg-overwrite-calibration"></a></dt>
 <dd><p>A logical indicating whether to overwrite existing calibration output. Defaults to <code>FALSE</code>. If <code>FALSE</code>, if a calibration output directory already exists, the function will skip processing and return.</p></dd>
+
+
+<dt id="arg-do-seasonal-calibration">do_seasonal_calibration<a class="anchor" aria-label="anchor" href="#arg-do-seasonal-calibration"></a></dt>
+<dd><p>A logical indicating whether to perform seasonal calibration. Defaults to NULL, which uses the filter_settings_list.</p></dd>
+
+
+<dt id="arg-stop-on-error">stop_on_error<a class="anchor" aria-label="anchor" href="#arg-stop-on-error"></a></dt>
+<dd><p>A logical indicating whether to stop processing if an error occurs. Defaults to FALSE. If TRUE, if an error occurs during processing of a logger/year combination, the function will stop and return an error message. If FALSE, the function will continue processing remaining logger/year combinations and will print a message indicating which logger/year combinations had errors.</p></dd>
 
 </dl></div>
 

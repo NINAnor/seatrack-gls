@@ -23,7 +23,9 @@ process_folder(
   output_dir = NULL,
   calibration_mode = TRUE,
   export_calibration_template = TRUE,
-  overwrite_calibration = FALSE
+  overwrite_calibration = FALSE,
+  do_seasonal_calibration = NULL,
+  stop_on_error = FALSE
 )
 ```
 
@@ -101,3 +103,17 @@ process_folder(
   A logical indicating whether to overwrite existing calibration output.
   Defaults to `FALSE`. If `FALSE`, if a calibration output directory
   already exists, the function will skip processing and return.
+
+- do_seasonal_calibration:
+
+  A logical indicating whether to perform seasonal calibration. Defaults
+  to NULL, which uses the filter_settings_list.
+
+- stop_on_error:
+
+  A logical indicating whether to stop processing if an error occurs.
+  Defaults to FALSE. If TRUE, if an error occurs during processing of a
+  logger/year combination, the function will stop and return an error
+  message. If FALSE, the function will continue processing remaining
+  logger/year combinations and will print a message indicating which
+  logger/year combinations had errors.

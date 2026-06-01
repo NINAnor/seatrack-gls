@@ -23,7 +23,8 @@ prepare_calibration(
   show_filter_plots = FALSE,
   export_calibration_template = TRUE,
   filter_setting_list = seatrackRgls::seatrack_settings_list,
-  overwrite_calibration = FALSE
+  overwrite_calibration = FALSE,
+  stop_on_error = FALSE
 )
 ```
 
@@ -90,6 +91,15 @@ prepare_calibration(
   A logical indicating whether to overwrite existing calibration output.
   Defaults to `FALSE`. If `FALSE`, if a calibration output directory
   already exists, the function will skip processing and return.
+
+- stop_on_error:
+
+  A logical indicating whether to stop processing if an error occurs.
+  Defaults to FALSE. If TRUE, if an error occurs during processing of a
+  logger/year combination, the function will stop and return an error
+  message. If FALSE, the function will continue processing remaining
+  logger/year combinations and will print a message indicating which
+  logger/year combinations had errors.
 
 ## Details
 

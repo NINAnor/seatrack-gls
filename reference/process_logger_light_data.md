@@ -18,7 +18,9 @@ process_logger_light_data(
   show_filter_plots = FALSE,
   plotting_dir = NULL,
   calibration_mode = TRUE,
-  min_length = 40
+  min_length = 40,
+  do_seasonal_calibration = NULL,
+  stop_on_error = FALSE
 )
 ```
 
@@ -68,6 +70,16 @@ process_logger_light_data(
 
   Number indicating minimum length of light data. Anything below this
   will fail. Defaults to 40.
+
+- do_seasonal_calibration:
+
+  A logical indicating whether to perform seasonal calibration. Defaults
+  to NULL, which uses the filter_settings_list.
+
+- stop_on_error:
+
+  A logical indicating whether to stop processing if an error occurs.
+  Defaults to FALSE.
 
 ## Value
 

@@ -6,7 +6,13 @@ exports to optimize position estimation based on latitude differences.
 ## Usage
 
 ``` r
-compare_sun_angle(prev_posdata_export, new_posdata_export, type, model = "")
+compare_sun_angle(
+  prev_posdata_export,
+  new_posdata_export,
+  type,
+  model = "",
+  min_length = 40
+)
 ```
 
 ## Arguments

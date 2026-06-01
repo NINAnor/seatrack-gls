@@ -54,7 +54,9 @@ this function processes the light data to estimate positions and apply various f
 <span>  show_filter_plots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plotting_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  calibration_mode <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  min_length <span class="op">=</span> <span class="fl">40</span></span>
+<span>  min_length <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>  do_seasonal_calibration <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stop_on_error <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,6 +102,14 @@ this function processes the light data to estimate positions and apply various f
 
 <dt id="arg-min-length">min_length<a class="anchor" aria-label="anchor" href="#arg-min-length"></a></dt>
 <dd><p>Number indicating minimum length of light data. Anything below this will fail. Defaults to 40.</p></dd>
+
+
+<dt id="arg-do-seasonal-calibration">do_seasonal_calibration<a class="anchor" aria-label="anchor" href="#arg-do-seasonal-calibration"></a></dt>
+<dd><p>A logical indicating whether to perform seasonal calibration. Defaults to NULL, which uses the filter_settings_list.</p></dd>
+
+
+<dt id="arg-stop-on-error">stop_on_error<a class="anchor" aria-label="anchor" href="#arg-stop-on-error"></a></dt>
+<dd><p>A logical indicating whether to stop processing if an error occurs. Defaults to FALSE.</p></dd>
 
 </dl></div>
     <div class="section level2">
