@@ -161,7 +161,9 @@ process_logger_year <- function(
 
     # Get logger colony info
     logger_colony_info <- all_colony_info[all_colony_info$colony == logger_calibration_data$colony[1], ]
-
+    if (nrow(logger_colony_info) == 0) {
+        stop(paste("No colony data found for logger colony:", logger_calibration_data$colony[1]))
+    }
 
 
     result <- process_logger_light_data(
